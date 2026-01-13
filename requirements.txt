@@ -1,0 +1,3 @@
+torch
+numpy
+tensor_toolbox # usse: pip install -q git+https://github.com/jnlandu/tensor-tensor-toolbox-in-python
