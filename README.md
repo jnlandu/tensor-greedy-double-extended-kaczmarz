@@ -6,11 +6,16 @@ The TGDBEK method is an efficient deterministic extended Kaczmarz variant to sol
 
 The TGDBEK method uses the greedy idea which selects the most "informative" hyperplanes to project onto at each iteration, leading to faster convergence compared to random selection methods.
 
-We benchmark the TGDEK method against several state-of-the-art algorithms on synthetic and real-world datasets, demonstrating its superior performance in terms of convergence speed and accuracy.
+We benchmark the TGDEK method against several state-of-the-art algorithms on synthetic and real-world matrices, demonstrating its superior performance in terms of running time (that we call CPU) and iteration counts (called IT).  
 
 We also apply the TDGBEK method to practical applicatons sucg as (color) image reconstruction and more. Finally, we assess the performance of the TDGEK method on sparse matrix from the [SuiteSparse Matrix Collection.](https://sparse.tamu.edu/).
+For this  task, the comparison perfomance was assessed using SSIM and PSNR metrics,  which are commonly used to evaluate  images.  The first metric, SSIM (Structural Similarity Index Measure), quantifies the similarity between two images, while PSNR (Peak Signal-to-Noise Ratio) measures the quality of the reconstructed image compared to the original one.
 
+
+
+<p style="text-align: center; font-size: 16px; color: gray;">
 The technical report detailing the convergence guarantees  will be made available soon.
+ </p>
 
 #### The TDGEK Algorithm
 <!-- [tgdbek_algorithm.jpg](./imgs/tgdbek_algorithm.jpg) -->
