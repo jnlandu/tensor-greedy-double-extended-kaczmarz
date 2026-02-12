@@ -14,7 +14,7 @@ For this  task, the comparison perfomance was assessed using SSIM and PSNR metri
 
 
 <p style="text-align: center; font-size: 16px; color: gray;">
-The (peer-reviewed)technical report detailing the convergence guarantees  will be made available soon. Find [here](/preprint.pdf) the first version of the report that's being finished.
+The (peer-reviewed) technical report detailing the convergence guarantees will be made available soon. Find  <a href="./preprint.pdf"> here </a> the first version of the report that's being finished.
  </p>
 
 #### The TDGEK Algorithm
