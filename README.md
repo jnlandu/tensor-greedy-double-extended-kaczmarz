@@ -104,10 +104,7 @@ The code presented here largely depends on the following  repos:
   url = {https://github.com/jnlandu/tensor-greedy-double-extended-kaczmarz}
 }
 ```
-
-### References
-<!-- - Guang-Xin Huang, Shuang-You Zhong. Tensor randomized extended Kaczmarz methods for large
-inconsistent tensor linear equations with t-product. Numerical Algorithms (2024) 96:1755–1778
-https://doi.org/10.1007/s11075-023-01684-w -->
+#### Open to Collaborate
+I welcome contributions and collaborations! If you're interested in improving this implementation, have suggestions, or would like to contribute, please feel free to open an issue or submit a pull request. If you would like to collaborate with me for research, I will appreciate it.
 
 
