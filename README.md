@@ -12,6 +12,8 @@ We also apply the TDGBEK method to practical applicatons sucg as (color) image r
 For this  task, the comparison perfomance was assessed using SSIM and PSNR metrics,  which are commonly used to evaluate  images.  The first metric, SSIM (Structural Similarity Index Measure), quantifies the similarity between two images, while PSNR (Peak Signal-to-Noise Ratio) measures the quality of the reconstructed image compared to the original one.
 
 
+### Abstract:
+The randomized Kaczmarz method is a widely adopted iterative method for solving linear systems of equations. To solve large-scale inconsistent linear systems of tensor equations under the t-product, we propose a tensor greedy double block extended Kaczmarz (TGDBEK) method. We prove theoretically the convergence guarantees and showed that the proposed method converges linearly to the minimum-norm least-square solution of the tensor system. Moreover, we assess the performance of the proposed method through several numerical experiments. Compared to existing methods, the TGDBEK does not require predefined partitions of the tensor system and reduces the running time for solving large inconsistent system, while also requiring less iteration.
 
 **The (peer-reviewed) technical report detailing the convergence guarantees will be made available soon. Find [here](./preprint.pdf) the first version of the report that's being finished.**
 
@@ -93,7 +95,15 @@ The code presented here largely depends on the following  repos:
 
 
 #### Citation
-Coming soon.
+```bibtex
+@unpublished{mabiala2026tgdbek,
+  author = {Mabiala, J.N.},
+  title = {Tensor greedy double block extended Kaczmarz},
+  year = {2026},
+  note = {To appear},
+  url = {https://github.com/jnlandu/tensor-greedy-double-extended-kaczmarz}
+}
+```
 
 ### References
 <!-- - Guang-Xin Huang, Shuang-You Zhong. Tensor randomized extended Kaczmarz methods for large
