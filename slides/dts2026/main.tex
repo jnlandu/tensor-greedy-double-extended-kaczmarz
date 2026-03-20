@@ -19,6 +19,8 @@
 \usepackage{booktabs}
 \usepackage{subcaption} % recommended
 % or: \usepackage{subfig}
+\usepackage{tikz}
+\usetikzlibrary{positioning,arrows.meta}
 
 
 % Optional: algorithm environment
@@ -40,6 +42,8 @@
 \newcommand{\mcalZ}{\mathcal{Z}}
 \newcommand{\mcalR}{\mathcal{R}}
 \newcommand{\mcalO}{\mathcal{O}} % zero tensor (use \mcalO)
+\newcommand{\mcalI}{\mathcal{I}}
+\newcommand{\mcalV}{\mathcal{V}}
 
 % --- sets / operators ---
 \newcommand{\Null}{\mathrm{Null}}
@@ -225,6 +229,97 @@ Kera Health, Inc.
       {\small Convergence on \texttt{Cities} matrix}
     \end{column}
   \end{columns}
+\end{frame}
+
+\begin{frame}{Images and Videos as Tensors}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \centering
+      \textbf{Image Tensor}
+
+      \vspace{4pt}
+      \begin{tikzpicture}[scale=0.9]
+        % RGB slices (3rd-order tensor: H x W x C)
+        \fill[blue!20]   (0.0,0.0) rectangle (2.4,2.4);
+        \draw[thick,blue!60!black] (0.0,0.0) rectangle (2.4,2.4);
+
+        \fill[green!20]  (0.25,0.25) rectangle (2.65,2.65);
+        \draw[thick,green!50!black] (0.25,0.25) rectangle (2.65,2.65);
+
+        \fill[red!20]    (0.5,0.5) rectangle (2.9,2.9);
+        \draw[thick,red!60!black] (0.5,0.5) rectangle (2.9,2.9);
+
+        \node[blue!60!black] at (1.2,0.2) {B};
+        \node[green!50!black] at (1.45,0.45) {G};
+        \node[red!60!black] at (1.7,0.7) {R};
+      \end{tikzpicture}
+
+      \vspace{3pt}
+      {\small $\mcalI \in \mbbr^{H \times W \times C}$ with $C=3$ (RGB)}
+    \end{column}
+
+    \begin{column}{0.48\textwidth}
+      \centering
+      \textbf{Video Tensor}
+
+      \vspace{4pt}
+      \begin{tikzpicture}[scale=0.9]
+        % Time-stacked frames (4th-order tensor: H x W x C x T)
+        \fill[gray!15] (0.0,0.0) rectangle (2.6,1.9);
+        \draw[thick]   (0.0,0.0) rectangle (2.6,1.9);
+
+        \fill[gray!20] (0.3,0.25) rectangle (2.9,2.15);
+        \draw[thick]   (0.3,0.25) rectangle (2.9,2.15);
+
+        \fill[gray!25] (0.6,0.5) rectangle (3.2,2.4);
+        \draw[thick]   (0.6,0.5) rectangle (3.2,2.4);
+
+        \draw[->, thick] (3.35,2.55) -- (4.4,3.35);
+        \node[right] at (4.45,3.35) {time $t$};
+      \end{tikzpicture}
+
+      \vspace{3pt}
+      {\small $\mcalV \in \mbbr^{H \times W \times C \times T}$}
+    \end{column}
+  \end{columns}
+
+  \vspace{8pt}
+  \centering
+  \small
+  Under the t-product framework, we typically work with third-order tensors;
+  videos can be handled frame-wise or via suitable reshaping.
+\end{frame}
+
+%-------------------------
+% KACZMARZ PRIMER (1 min)
+%-------------------------
+\section{Kaczmarz Primer}
+\begin{frame}{Matrix Kaczmarz and Randomized Kaczmarz}
+  Consider a linear system $Ax=b$ with rows $a_i^\top$ of $A$.
+
+  \medskip
+  \textbf{Kaczmarz update (row projection):}
+  \[
+    x^{k+1} = x^k + \frac{b_i - a_i^\top x^k}{\|a_i\|_2^2} a_i
+  \]
+  \begin{itemize}
+    \item At each step, project $x^k$ onto the hyperplane
+          $\{x: a_i^\top x = b_i\}$.
+    \item Cyclic version scans rows in order $i=1,2,\dots,m$.
+  \end{itemize}
+
+  \medskip
+  \textbf{Randomized Kaczmarz (RK):}
+  \begin{itemize}
+    \item Pick row $i_k$ randomly, often with
+          $\Pr(i_k=i)=\|a_i\|_2^2/\|A\|_F^2$.
+    \item Same projection formula with $i=i_k$.
+    \item For consistent systems, RK converges \emph{linearly in expectation}.
+  \end{itemize}
+
+  \medskip
+  \textbf{Bridge to this talk:}
+  TGDBEK is the tensor/t-product extension using greedy row/column-slice selection.
 \end{frame}
 
 %-------------------------
