@@ -100,11 +100,9 @@ The code presented here largely depends on the following  repos:
   author = {Mabiala, J.N.},
   title = {Tensor greedy double block extended Kaczmarz},
   year = {2026},
-  note = {To appear},
+  note = {Submitted for review},
   url = {https://github.com/jnlandu/tensor-greedy-double-extended-kaczmarz}
 }
 ```
-#### Open to Collaborate
-I welcome contributions and collaborations! If you're interested in improving this implementation, have suggestions, or would like to contribute, please feel free to open an issue or submit a pull request. If you would like to collaborate with me for research, I will appreciate it.
 
 
