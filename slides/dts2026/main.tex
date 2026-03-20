@@ -1,6 +1,3 @@
-%====================================================
-% GBREK – LaTeX Beamer Template
-%====================================================
 \documentclass[aspectratio=169]{beamer} 
 
 %-------------------------
@@ -185,10 +182,12 @@
     Solving Tensor Linear Systems  under the t-product by a Kaczmarz-type method
     }
 \author[Jeremie Mabiala]{Jeremie Mabiala}
-\institute[]{%
-Kera Health, Inc.
-}
-\date{AIMIC, Doctoral Training School - 2026}
+% \institute[]{%
+% Kera Health, Inc.
+% }
+
+\input{TGDBEK.sty}
+\date{AIMS RIC, Doctoral Training School - 2026}
 % Path to images (relative to this .tex file)
 \graphicspath{{../../imgs/}}
 
@@ -224,106 +223,131 @@ Kera Health, Inc.
     \end{column}
     \begin{column}{0.4\textwidth}
       \centering
-      \includegraphics[width=\linewidth]{cities_tgdbek.png}
+      \includegraphics[width=\linewidth]{image2tensor.png}
       \\[4pt]
-      {\small Convergence on \texttt{Cities} matrix}
+      {\small Image as a 3D tensor (H x W x C)}
     \end{column}
   \end{columns}
 \end{frame}
 
-\begin{frame}{Images and Videos as Tensors}
-  \begin{columns}[T]
-    \begin{column}{0.48\textwidth}
-      \centering
-      \textbf{Image Tensor}
-
-      \vspace{4pt}
-      \begin{tikzpicture}[scale=0.9]
-        % RGB slices (3rd-order tensor: H x W x C)
-        \fill[blue!20]   (0.0,0.0) rectangle (2.4,2.4);
-        \draw[thick,blue!60!black] (0.0,0.0) rectangle (2.4,2.4);
-
-        \fill[green!20]  (0.25,0.25) rectangle (2.65,2.65);
-        \draw[thick,green!50!black] (0.25,0.25) rectangle (2.65,2.65);
-
-        \fill[red!20]    (0.5,0.5) rectangle (2.9,2.9);
-        \draw[thick,red!60!black] (0.5,0.5) rectangle (2.9,2.9);
-
-        \node[blue!60!black] at (1.2,0.2) {B};
-        \node[green!50!black] at (1.45,0.45) {G};
-        \node[red!60!black] at (1.7,0.7) {R};
-      \end{tikzpicture}
-
-      \vspace{3pt}
-      {\small $\mcalI \in \mbbr^{H \times W \times C}$ with $C=3$ (RGB)}
-    \end{column}
-
-    \begin{column}{0.48\textwidth}
-      \centering
-      \textbf{Video Tensor}
-
-      \vspace{4pt}
-      \begin{tikzpicture}[scale=0.9]
-        % Time-stacked frames (4th-order tensor: H x W x C x T)
-        \fill[gray!15] (0.0,0.0) rectangle (2.6,1.9);
-        \draw[thick]   (0.0,0.0) rectangle (2.6,1.9);
-
-        \fill[gray!20] (0.3,0.25) rectangle (2.9,2.15);
-        \draw[thick]   (0.3,0.25) rectangle (2.9,2.15);
-
-        \fill[gray!25] (0.6,0.5) rectangle (3.2,2.4);
-        \draw[thick]   (0.6,0.5) rectangle (3.2,2.4);
-
-        \draw[->, thick] (3.35,2.55) -- (4.4,3.35);
-        \node[right] at (4.45,3.35) {time $t$};
-      \end{tikzpicture}
-
-      \vspace{3pt}
-      {\small $\mcalV \in \mbbr^{H \times W \times C \times T}$}
-    \end{column}
-  \end{columns}
-
-  \vspace{8pt}
+\begin{frame}{}
+\begin{figure}
   \centering
-  \small
-  Under the t-product framework, we typically work with third-order tensors;
-  videos can be handled frame-wise or via suitable reshaping.
+  \begin{subfigure}[b]{0.48\linewidth}
+    \centering
+    % \includegraphics[width=\linewidth]{3d-tensor.png}
+      \includegraphics[width=\linewidth]{tensors-v.jpg}
+    % \caption{Caption}
+    % \label{fig:3d-tensor-1}
+  \end{subfigure}\hfill
+  \begin{subfigure}[b]{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{3d-tensor-1.png}
+    % \caption{Caption}
+    % \label{fig:3d-tensor-2}
+  \end{subfigure}
+  \caption{Illustration of third-order tensors. }
+  \label{fig:3d-tensors}
+\end{figure}
+\end{frame}
+
+% -------------------------
+% T-PRODUCT DEFINITION
+%-------------------------
+\section{The t-Product}
+\begin{frame}{The t-Product: Why and How}
+
+  \textbf{Definition} (Kilmer \& Martin, 2011): Given $\mcalA \in \mbbr^{m \times n \times p}$
+  and $\mcalX \in \mbbr^{n \times k \times p}$, the t-product $\mcalA * \mcalX$ is:
+  \[
+    \mcalA * \mcalX
+    \;=\;
+    \fold\!\Big(\bcirc(\mcalA) \cdot \unfold(\mcalX)\Big)
+    \;\in\; \mbbr^{m \times k \times p}
+  \]
+  where $\bcirc(\mcalA) \in \mbbr^{mp \times np}$ is the block-circulant matrix of $\mcalA$, and $\unfold(\mcalX) \in \mbbr^{nk \times p}$ is the mode-3 unfolding of $\mcalX$, defined as:
+
+\end{frame}
+\begin{frame}
+  $$
+    \bcirc(\mcala):=\bem\mbf A_1 &\mbf A_{N_3} & \cdots & \mbf A_2\\ \mbf A_2 & \mbf A_1 & \cdots &\mbf A_3\\ \vdots &\vdots & \ddots &\vdots\\ \mbf A_{N_3}& \mbf A_{N_3-1}& \cdots &\mbf A_1\eem\in\mbbr^{N_1N_3\times N_2N_3}.
+$$
+
+$$
+\unfold(\mcala):=\bem\mbf A_1\\ \mbf A_2\\ \vdots\\ \mbf A_{N_3}\eem\in\mbbr^{N_1N_3\times N_2},\qquad \fold\left(\bem\mbf A_1\\ \mbf A_2\\ \vdots\\ \mbf A_{N_3}\eem\right):=\mcala.
+$$ 
+\end{frame}
+
+\begin{frame}
+    \textbf{Why the t-product?}
+  \begin{itemize}
+    % \item Vectoriziation don't capture the multi-dimensional  structure of tensors and  leads to loss of information and interpretability.
+    \item Classical matrix algebra cannot directly capture the \textbf{multi-channel structure}
+          of tensors (e.g.\ RGB channels, video frames).
+    \item The t-product defines a \textbf{matrix-like algebra for third-order tensors},
+          preserving notions of transpose, inverse, SVD, and rank.
+  \end{itemize}
+\end{frame}
+\begin{frame}
+   \medskip
+  \textbf{Key properties:}
+  \begin{itemize}
+    \item Efficient computation via \textbf{FFT along the tube dimension}
+    \item Supports transpose ($\mcalA^\top$), pseudoinverse ($\mcalA^\dagger$), and t-SVD
+    \item Enables a full \textbf{linear algebra framework} for 3D data
+  \end{itemize}
 \end{frame}
 
 %-------------------------
 % KACZMARZ PRIMER (1 min)
 %-------------------------
 \section{Kaczmarz Primer}
-\begin{frame}{Matrix Kaczmarz and Randomized Kaczmarz}
+\begin{frame}{Cyclic and Randomized Kaczmarz}
   Consider a linear system $Ax=b$ with rows $a_i^\top$ of $A$.
 
   \medskip
   \textbf{Kaczmarz update (row projection):}
   \[
-    x^{k+1} = x^k + \frac{b_i - a_i^\top x^k}{\|a_i\|_2^2} a_i
+    x^{k+1} = x^k + \frac{b_{i_k} - a_{i_k}^\top x^k}{\|a_i\|_2^2} a_{i_k}
   \]
   \begin{itemize}
     \item At each step, project $x^k$ onto the hyperplane
           $\{x: a_i^\top x = b_i\}$.
-    \item Cyclic version scans rows in order $i=1,2,\dots,m$.
+    \item Cyclic version scans rows in order $i_k = k(\mod i) + 1 $ % 1,2,\dots,m$.
   \end{itemize}
-
-  \medskip
-  \textbf{Randomized Kaczmarz (RK):}
-  \begin{itemize}
-    \item Pick row $i_k$ randomly, often with
-          $\Pr(i_k=i)=\|a_i\|_2^2/\|A\|_F^2$.
-    \item Same projection formula with $i=i_k$.
-    \item For consistent systems, RK converges \emph{linearly in expectation}.
-  \end{itemize}
-
-  \medskip
-  \textbf{Bridge to this talk:}
-  TGDBEK is the tensor/t-product extension using greedy row/column-slice selection.
 \end{frame}
 
+\begin{frame}
+  \textbf{Randomized Kaczmarz (RK):}
+  \begin{itemize}
+    \item Pick row $i_k$ randomly, with
+          $\Pr(i_k=i)=\|a_i\|_2^2/\|A\|_F^2$.
+    \item Same projection formula with $i=i_k$.
+    \item For consistent and overdetermined  systems, RK converges \emph{linearly in expectation} and satisfies:
+          \[
+            \mathbb{E}[\|x^k - x^\star\|_2^2] \leq \left(1 - \frac{\sigma_{\min}^2(A)}{\|A\|_F^2}\right)^k \|x^0 - x^\star\|_2^2
+          \]
+    \item For inconsistent systems $A  x = b + \epsilon$ , the \textbf{randomized extended Kaczmarz (REK)}  variant  applies doubly the RK method to the systems 
+    $$ A x = b-z  \quad A^\top z = 0 $$.
+
+    
+    \item converges linearly in expectation to the minimum-norm  \emph{least-squares solution}.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \begin{center}
+    \begin{figure}
+      \includegraphics[width=0.8\textwidth]{kaczmarz_projection.png}
+    \caption{Illustration of Kaczmarz iterations as projections onto hyperplanes defined by the rows of $A$.}
+    \end{figure}
+  \end{center}
+\end{frame}
+
+
+%
 %-------------------------
-% SLIDE 3: PROBLEM STATEMENT (1 min)
+% SLIDE: PROBLEM STATEMENT (1 min)
 %-------------------------
 \section{Problem Statement}
 \begin{frame}{Problem Setup}
@@ -331,7 +355,7 @@ Kera Health, Inc.
     Given $\mcalA \in \mbbr^{m \times n \times p}$ and $\mcalB \in \mbbr^{m \times k \times p}$,
     find $\mcalX \in \mbbr^{n \times k \times p}$ satisfying:
     \[
-      \mcalA * \mcalX = \mcalB
+      \mcalA * \mcalX = \mcalB + \epsilon
     \]
   \end{block}
 
@@ -346,7 +370,7 @@ Kera Health, Inc.
   \medskip
   \textbf{Setting:}
   \begin{itemize}
-    \item System can be \textbf{inconsistent} ($\mcalB \notin \ran(\mcalA)$)
+    \item System is \textbf{inconsistent} ($\mcalB \notin \ran(\mcalA)$)
     \item Dimensions $m, n$ large $\Rightarrow$ direct solvers impractical
     \item Iterative Kaczmarz-type methods are well-suited
   \end{itemize}
@@ -359,12 +383,14 @@ Kera Health, Inc.
 \begin{frame}{Existing Methods \& Limitations}
   \textbf{Tensor Kaczmarz variants in the literature:}
   \begin{itemize}
-    \item \textbf{TREK} -- Tensor Randomized Extended Kaczmarz
-    \item \textbf{TREBK} -- Tensor Randomized Extended Block Kaczmarz
-    \item \textbf{TREGBK} -- Tensor Randomized Extended Greedy Block Kaczmarz
+    \item \textbf{TREK} -- Tensor Randomized Extended Kaczmarz \cite{huang2024tensor}
+    \item \textbf{TREBK} -- Tensor Randomized Extended Block Kaczmarz \cite{huang2024tensor}
+    \item \textbf{TREGBK} -- Tensor Randomized Extended Greedy Block Kaczmarz \cite{huang2024tensor}
+    \item \textbf{TREABK} -- Tensor Randomized Extended Averaged Block Kaczmarz \cite{an2025randomized,bao2022randomized}
   \end{itemize}
+\end{frame}
 
-  \bigskip
+\begin{frame}
   \textbf{Key limitation:}
   \begin{alertblock}{Pre-defined Partitions Required}
     TREBK, TREGBK, and similar block methods require a
@@ -454,28 +480,21 @@ Kera Health, Inc.
 %-------------------------
 \section{Convergence}
 \begin{frame}{Convergence Guarantee}
-  \begin{theorem}
-    Let $\mcalA \in \mbbr^{m \times n \times p}$ and $\mcalB \in \mbbr^{m \times k \times p}$.
-    The iterates $\{\mcalX^k\}$ produced by TGDBEK converge \textbf{linearly} to the
-    minimum-norm least-squares solution $\mcalX^{\star}$:
-    \[
-      \mbbe\big[\| \mcalX^k - \mcalX^{\star} \|_F^2\big]
-      \;\leq\;
-      \rho^k \, \| \mcalX^0 - \mcalX^{\star} \|_F^2
-    \]
-    where $0 < \rho < 1$ depends on $\eta$ and the spectral properties of $\mcalA$.
-  \end{theorem}
+  \begin{theorem} 
+    Let $\mcalA \in \mbbr^{m \times n \times p}$ and $\mcalB \in \mbbr^{m \times k \times p}$. let $\fm B^\perp := \fm B - \fm A *\fm A^\dagger *\fm B$. The iterate $\{\fm X^{(k)}\}$ generated  by TGDBEK algorithm  converges
+    \text{linearly} to the minimum-norm least-square solution $\fm X_\ast = \fm A^\dagger * \fm B$. Moreover, for $k\geq 1$, the following holds
+\begin{align*}
+    \Vert \fm X ^{(k+1)} - \fm X_\ast \Vert_F^2 \leq \alpha^{k+1}\Vert \fm X_0 - \fm X_\ast \Vert_F^2 + \frac{\alpha^{k+1}-\beta^{k+1}}{\alpha - \beta}\Vert \fm B^\perp \Vert_F^2
+\end{align*}
+where $ \alpha = 1 - \theta \frac{\sigma_{\min}^2(\bcirc(\fm A^\top))}{\sigma^2_{\max}(\bcirc(\fm A^\top ))}$, $\beta = 1- \frac{\sigma^2_{\max}(\fm A)}{\Vert \fm A \Vert^2_F - \Vert \fm A(\overline{U}) \Vert_F^2}$, $\gamma = \sigma^2_{\min}(\fm A^{\fm J}), \; \theta \in (0,1]$ and $\eta \in (0, 1]$.
+\end{theorem} 
+\end{frame}
 
-  \medskip
-  \textbf{Key points:}
+\begin{frame}
+  % \textbf{Key points:}
   \begin{itemize}
-    \item Convergence to the \emph{minimum-norm least-squares} solution
-    \item Works for inconsistent systems
-    \item Rate improves with well-conditioned $\mcalA$ and appropriate $\eta$
+    \item  {\small \textit{Full proof available in the technical report.}}
   \end{itemize}
-
-  \vfill
-  {\small \textit{Full proof available in the technical report.}}
 \end{frame}
 
 %-------------------------
@@ -502,8 +521,11 @@ Kera Health, Inc.
       \end{tabular}
 
       \medskip
+      \medskip
+      \medskip
       {\small \textbf{nos5} ($153 \times 153$, density $= 0.047$)}
 
+      \smallskip
       \smallskip
       \begin{tabular}{@{}lrrr@{}}
         \toprule
@@ -518,12 +540,12 @@ Kera Health, Inc.
     \end{column}
     \begin{column}{0.45\textwidth}
       \centering
-      \includegraphics[width=\linewidth]{ash85_tdgbek.png}
+      \includegraphics[width=.9\linewidth]{ash85_tdgbek.png}
       \\[1pt]
       {\scriptsize RSE vs.\ Iterations (ash85)}
 
       \medskip
-      \includegraphics[width=\linewidth]{nos5_tdgbek.png}
+      \includegraphics[width=.9\linewidth]{nos5_tdgbek.png}
       \\[1pt]
       {\scriptsize RSE vs.\ Iterations (nos5)}
     \end{column}
@@ -533,10 +555,11 @@ Kera Health, Inc.
 %-------------------------
 % SLIDE 9: MORE RESULTS -- CITIES (30 s)
 %-------------------------
-\begin{frame}{Results: Cities Matrix ($128 \times 128$)}
+\begin{frame}{}
   \begin{columns}[c]
     \begin{column}{0.5\textwidth}
-      \centering
+       \centering
+      {\small \textbf{Cities Matrix} ($128 \times 128$), density $= 0.072$)}
       \begin{tabular}{@{}lrrr@{}}
         \toprule
         \textbf{Method} & \textbf{Time} & \textbf{RSE} & \textbf{IT} \\
@@ -564,6 +587,27 @@ Kera Health, Inc.
   \end{itemize}
 \end{frame}
 
+\begin{frame}[shrink=5]{Results on Color Image Deblurring \& Reconstruction}
+  {\small Color image deblurring: TGDBEK achieves higher PSNR and faster convergence
+  than TREK/TREBK/TREGBK on standard test images.}
+
+  \smallskip
+  \begin{columns}[c]
+    \begin{column}{0.48\textwidth}
+      \centering
+      \includegraphics[width=0.75\linewidth]{flower.jpg}
+      \\[3pt]
+      {\small Original image}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \centering
+      \includegraphics[width=0.75\linewidth]{ex3-blur.png}
+      \\[3pt]
+      {\small Blurred image}
+    \end{column}
+  \end{columns}
+\end{frame}
+
 %-------------------------
 % SLIDE 10: SUMMARY & FUTURE WORK (1 min)
 %-------------------------
@@ -571,26 +615,41 @@ Kera Health, Inc.
 \begin{frame}{Summary \& Future Work}
   \textbf{Summary:}
   \begin{enumerate}
-    \item \textbf{No pre-defined partitions} -- greedy selection adapts at each step
-    \item \textbf{Faster convergence} -- fewer iterations than TREK, TREBK, TREGBK
-    \item \textbf{Proven guarantees} -- linear convergence to min-norm LS solution
+    \item \textbf{No pre-defined partitions}: greedy selection adapts  at each step
+    \item \textbf{Faster convergence} : fewer iterations than TREK, TREBK, TREGBK
+    \item \textbf{Proven guarantees} : linear convergence to min-norm LS solution
   \end{enumerate}
 
   \bigskip
-  \textbf{Future work:}
+\end{frame}
+
+\section{Experiments on Image reconstruction}
+\begin{frame}{Experiments on Image reconstruction \& Color image deblurring}
+
+\end{frame}
+\begin{frame}
+    \textbf{Future work:}
   \begin{itemize}
     \item Larger-scale experiments (high-resolution images, video)
     \item GPU-accelerated implementation via PyTorch
     \item Extensions to other tensor decompositions (Tucker, TT)
     \item Applications to tensor completion and compressed sensing
   \end{itemize}
-
-  \bigskip
+\end{frame}
+\begin{frame}
   \begin{center}
     \textbf{Thank you!}
-    \\[6pt]
+    \\[10pt]
     Code: \url{https://github.com/jnlandu/tensor-greedy-double-extended-kaczmarz}
   \end{center}
+\end{frame}
+
+\section{References}
+\begin{frame}{References}
+    \tiny
+    \nocite{*}
+    \bibliographystyle{plain}
+    \bibliography{references}
 \end{frame}
 
 \end{document}
