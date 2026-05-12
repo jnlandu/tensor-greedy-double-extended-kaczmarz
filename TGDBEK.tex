@@ -712,28 +712,28 @@ Table~\ref{tab:ex3} and Fig.~\ref{fig:ex3-summary} show that TGDBEK is the only 
 \end{remark}
 
 \begin{example}[\textbf{High-iteration image deblurring}] \label{ex:gray-image}
-This experiment explores the regime of longer iteration budgets to stress-test the convergence behaviour of each method. We use the same blurring model as in Example~\ref{ex:color-image} applied to a second $200\times200\times3$ test image, with noise level $a = 10^{-1}$ and a maximum of $3000$ iterations. As illustrated in Fig.~\ref{fig:ex4-conv}, TGDBEK converges steeply and reaches $\mathrm{RSE} < 10^{-5}$ around iteration $612$, whilst TREGBK requires approximately $2\,000$ iterations and TREBK approximately $2\,500$ iterations to attain the same accuracy level. TREK effectively stagnates throughout, never reducing its residual below $8\times 10^{-1}$.
+This experiment explores the regime of longer iteration budgets to stress-test the convergence behaviour of each method. We use the same blurring model as in Example~\ref{ex:color-image} applied to a second $200\times200\times3$ test image, with noise level $a = 10^{-1}$ and a maximum of $3000$ iterations. As illustrated in Fig.~\ref{fig:ex4-conv}, TGDBEK converges steeply and reaches $\mathrm{RSE} < 10^{-5}$ at iteration $502$, whilst TREGBK requires $1730$ iterations and TREBK $2363$ iterations to attain the same accuracy level. TREK effectively stagnates throughout, never reducing its residual below $7\times 10^{-1}$.
 
-Table~\ref{tab:ex4} summarises the final metrics. TGDBEK's early termination (IT~$=612$) yields the shortest CPU time among the converging methods despite its per-iteration cost being marginally higher, confirming that the greedy double-block selection amortises its overhead very efficiently in this challenging regime. The restored images for each method are displayed in Fig.~\ref{fig:ex4-summary}.
+Table~\ref{tab:ex4} summarises the final metrics. TGDBEK's early termination ($\mathrm{IT}=502$) yields the shortest CPU time among the converging methods ($18.46\,\mathrm{s}$), confirming that the greedy double-block selection amortises its overhead efficiently in this challenging regime. The restored images for each method are displayed in Fig.~\ref{fig:ex4-summary}.
 \begin{table}[ht]
 \centering
 \begin{tabular}{lrrr}
 \toprule
 Method & RSE & CPU (s) & IT \\
 \midrule
-TREK   & $8.17\times10^{-1}$ & 49.82 & 3000 \\
-TREBK  & $1.23\times10^{-5}$ & 36.54 & 3000 \\
-TREGBK & $1.09\times10^{-5}$ & 51.73 & 3000 \\
-TGDBEK & $9.84\times10^{-6}$ & 22.47 &  612 \\
+TREK   & $7.19\times10^{-1}$ & 10.74 & 3000 \\
+TREBK  & $9.93\times10^{-6}$ & 21.71 & 2363 \\
+TREGBK & $9.57\times10^{-6}$ & 31.57 & 1730 \\
+TGDBEK & $9.99\times10^{-6}$ & 18.46 &  502 \\
 \bottomrule
 \end{tabular}
-\caption{RSE, CPU time, and iteration count for the high-iteration image deblurring experiment ($200\times200\times3$, noise level $a=10^{-1}$, maximum $3000$ iterations). TREK does not reach $\mathrm{RSE}<10^{-5}$.}
+\caption{RSE, CPU time, and iteration count for the high-iteration image deblurring experiment ($200\times200\times3$, noise level $a=10^{-1}$, maximum $3000$ iterations). TGDBEK converges in $502$ iterations; TREK does not reach $\mathrm{RSE}<10^{-5}$.}
 \label{tab:ex4}
 \end{table}
 \end{example}
 
 \begin{remark}
-The high-iteration experiment reveals a decisive advantage for TGDBEK when the iteration budget is generous. TGDBEK is the only method to satisfy $\mathrm{RSE} < 10^{-5}$, doing so at iteration $612$ — just $20\%$ of the $3000$-iteration budget. By contrast, TREBK and TREGBK exhaust the full budget while remaining marginally above the tolerance ($1.23\times10^{-5}$ and $1.09\times10^{-5}$, respectively), and TREK stagnates at $\mathrm{RSE}\approx8.17\times10^{-1}$. The corresponding wall-time reduction is substantial: $22.47\,\mathrm{s}$ for TGDBEK versus $36.54\,\mathrm{s}$ (TREBK, $1.6\times$ speedup) and $51.73\,\mathrm{s}$ (TREGBK, $2.3\times$ speedup). These results demonstrate that the greedy double-block selection strategy translates iteration efficiency into meaningful wall-time savings on imaging problems of practical scale.
+The high-iteration experiment reveals a decisive advantage for TGDBEK when the iteration budget is generous. All three block methods converge to $\mathrm{RSE}<10^{-5}$, but TGDBEK does so at iteration $502$ — only $17\%$ of the $3000$-iteration budget — while TREGBK requires $1730$ and TREBK $2363$ iterations. TREK stagnates throughout at $\mathrm{RSE}\approx7.19\times10^{-1}$. The wall-time advantage mirrors the iteration savings: TGDBEK takes $18.46\,\mathrm{s}$ versus $21.71\,\mathrm{s}$ (TREBK, $15\%$ reduction) and $31.57\,\mathrm{s}$ (TREGBK, $42\%$ reduction). These results demonstrate that the greedy double-block selection strategy translates iteration efficiency into meaningful wall-time savings on imaging problems of practical scale.
 \end{remark}
 
 
@@ -743,7 +743,7 @@ The high-iteration experiment reveals a decisive advantage for TGDBEK when the i
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.75\linewidth]{main-folder/tests/ex2-plot.png}
-\caption{RSE versus iteration (IT) for the high-iteration image deblurring experiment. TGDBEK converges in $\sim\!612$ iterations; TREK stagnates throughout the $3000$-iteration budget.}
+\caption{RSE versus iteration (IT) for the high-iteration image deblurring experiment. TGDBEK converges in $\sim\!502$ iterations; TREK stagnates throughout the $3000$-iteration budget.}
 \label{fig:ex4-conv}
 \end{figure}
 
