@@ -354,6 +354,8 @@ provided $\alpha,\beta\in(0,1)$, which holds under the following conditions.
 
 \textit{Upper bounds.}
 $\alpha<1$ holds whenever $\theta>0$, i.e., whenever the error $\fm X^{(l)}-\fm X_\ast$ is not entirely orthogonal to $\mathrm{range}((\fm A_{J_l,:,:})^\top)$ for all $l$.
+For the greedy selection of Algorithm~\ref{alg:alg-1}, this holds at every step where $\fm X^{(l)}\neq\fm X_\ast$: the active set $J_k$ is chosen to maximise the row-residual scores, so $J_k$ contains at least one index $i$ for which $\|\fm B_{i,:,:}-\fm Z^{(k+1)}_{i,:,:}-\fm A_{i,:,:}*\fm X^{(k)}\|_F>0$; since $\fm B_{R(\fm A)}=\fm A*\fm A^\dagger*\fm B$ and $\fm X_\ast=\fm A^\dagger*\fm B$, this non-zero residual implies $\fm A_{J_k,:,:}*(\fm X^{(k)}-\fm X_\ast)\neq\fm O$, i.e., $\theta_l>0$.
+A uniform lower bound $\theta=\inf_{l\geq 0}\theta_l>0$ follows from the fact that $N_1$ is finite and $\fm A$ has full column rank: the set of distinct active subblocks $\{\fm A_{J_l,:,:}\}$ is finite, each has positive smallest singular value, and the error can never be driven entirely into all of their null spaces simultaneously.
 $\beta<1$ holds whenever $\eta>0$,
 $\sigma_{\min}^2\!\left(\bcirc(\fm A^\top)\right)>0$ ($\fm A$ has full column rank),
 and $\|\fm A_{:,\overline{U},:}\|_F^2<\|\fm A\|_F^2$ (the active column-block
@@ -514,7 +516,7 @@ where $\fm\zeta$ is a standard Gaussian tensor and $a > 0$ controls the noise le
 %        5 independent trials; max 800 iterations; tol = 1e-5.
 % -----------------------------------------------------------------------
 \begin{example}[\textbf{Dense overdetermined tensor systems}] \label{ex:dense}
-We evaluate TGDBEK against TREK, TREBK, TREGBK, and TREABK on randomly generated dense overdetermined tensor systems of the form~\eqref{eq:eq1}. The coefficient tensor $\fm A \in \mathbb{R}^{500\times n\times 10}$ has i.i.d.\ standard Gaussian entries, and $\fm B = \fm A * \fm X_\ast + \fm\epsilon$ where $\fm X_\ast \in \mathbb{R}^{n\times 10\times 10}$ is also random. We vary the column dimension $n\in\{20,30,40,50,60,80\}$ to assess how each algorithm scales with problem size. For the block-partitioned methods (TREBK, TREGBK, TREABK), $\tau=10$ sequential blocks are used per mode; for TGDBEK the greedy threshold is set to $\eta=0.6$. The maximum iteration count is $800$ and the noise level is $a=10^{-3}$. Results are averaged over 5 independent trials and reported in Table~\ref{tab:ex1}.
+We evaluate TGDBEK against TREK, TREBK, TREGBK, and TREABK on randomly generated dense overdetermined tensor systems of the form~\eqref{eq:eq1}. The coefficient tensor $\fm A \in \mathbb{R}^{500\times n\times 10}$ has i.i.d.\ standard Gaussian entries, and $\fm B = \fm A * \fm X_\ast + \fm\epsilon$ where $\fm X_\ast \in \mathbb{R}^{n\times 10\times 10}$ is also random. We vary the column dimension $n\in\{20,30,40,50,60,80\}$ to assess how each algorithm scales with problem size. For the block-partitioned methods (TREBK, TREGBK, TREABK), $\tau=10$ sequential blocks are used per mode; for TGDBEK the greedy threshold is set to $\eta=0.6$. The maximum iteration count is $800$ and the noise level is $a=10^{-3}$. Results are averaged over 5 independent trials and reported in Table~\ref{tab:ex1} and Fig.~\ref{fig:ex1}. Convergence curves for representative cases $n=20$ and $n=80$ are shown in Fig.~\ref{fig:ex1-rse}.
 %
 % Table 1: IT and CPU for the dense n-sweep. Data taken directly from
 %          df_n_sweep (cell 26 of main-notebook-feb-16-2026.ipynb).
@@ -556,7 +558,33 @@ Method & Metric & $n=20$ & $n=30$ & $n=40$ & $n=50$ & $n=60$ & $n=80$ \\
 \begin{remark}
 It can be observed from Table~\ref{tab:ex1} that TGDBEK consistently requires the fewest iterations across all values of $n$, achieving speedup factors of approximately $16\times$ over TREK and $3$--$6\times$ over TREBK and TREGBK in iteration count. Notably, TREK exhausts the iteration budget ($800$ steps) for $n\geq 30$ without reaching the prescribed tolerance, whereas TGDBEK converges in fewer than $50$ iterations even for $n=80$. The wall-clock time of TGDBEK remains competitive despite its higher per-iteration cost, confirming the efficiency of the greedy double-block active set strategy.
 \end{remark}
-
+\begin{figure}[!ht]
+\centering
+\begin{subfigure}[t]{0.48\linewidth}
+  \centering
+  \includegraphics[width=\linewidth]{main-folder/tests/tests/ex1-IT.png}
+  \caption{Iteration count (IT) vs.\ $n$.}
+  \label{fig:ex1-IT}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.48\linewidth}
+  \centering
+  \includegraphics[width=\linewidth]{main-folder/tests/tests/ex1-CPU.png}
+  \caption{CPU time (s) vs.\ $n$.}
+  \label{fig:ex1-CPU}
+\end{subfigure}
+\caption{IT and CPU time as functions of $n$ for dense overdetermined tensor systems
+$\fm A\in\mathbb{R}^{500\times n\times 10}$ (noise $a=10^{-3}$, maximum $800$ iterations,
+averaged over $5$ trials). TGDBEK achieves the lowest iteration count at every $n$;
+TREK exhausts the budget for $n\geq 30$.}
+\label{fig:ex1}
+\end{figure}
+\vspace{-\floatsep}
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\linewidth]{main-folder/tests/tests/ex1-rse-it.png}
+\caption{RSE versus iteration for $n=20$ (left) and $n=80$ (right). At $n=20$ TGDBEK converges in $23$ iterations; at $n=80$ it converges in $43$ while TREK exhausts the $800$-iteration budget. The dotted horizontal line marks the tolerance $\mathrm{tol}=10^{-5}$.}
+\label{fig:ex1-rse}
+\end{figure}
 % -----------------------------------------------------------------------
 % Example 4.2 — Sparse tensor systems from SuiteSparse.
 % Notebook: experiments-sparse-mats-notebook-feb-16-2026.ipynb.
@@ -853,7 +881,7 @@ The MRI-like experiment of Example~\ref{ex:gray} highlights a key qualitative ad
 \begin{example}[\textbf{Effect of the greedy threshold $\eta$}] \label{ex:eta}
 The parameter $\eta \in (0,1]$ controls the selectivity of the greedy block rule: row block $i$ is added to the active set $U_k$ if and only if $\|\fm A_{i,:,:}^\top * \fm r^{(k)}\|_F^2 \geq \eta \cdot \max_j \|\fm A_{j,:,:}^\top * \fm r^{(k)}\|_F^2$, and similarly for column blocks. A small $\eta$ includes many blocks per step (akin to TREBK), whereas $\eta \to 1$ retains only the single most informative block (akin to TREK). We study the sensitivity of TGDBEK to this parameter on the dense system $\fm A \in \mathbb{R}^{500\times20\times10}$ with noise level $a=10^{-2}$, maximum $2000$ iterations, and tolerance $10^{-6}$, averaged over $20$ independent runs.
 
-Table~\ref{tab:eta} and Fig.~\ref{fig:eta} report the average iteration count and CPU time as functions of $\eta$. For $\eta \leq 0.5$, TGDBEK selects a generous number of blocks at each step: convergence is achieved in very few iterations ($\leq 25$) and the total wall time remains below $0.1\,\mathrm{s}$. As $\eta$ increases beyond $0.5$, the active set shrinks, per-step progress decreases, and both IT and CPU grow substantially. At $\eta = 1.0$ the algorithm degenerates to a TREK-like single-block update, requiring approximately $350$ iterations and more than $4\,\mathrm{s}$. These results confirm that the optimal range for $\eta$ lies in $[0.1, 0.6]$; we adopt $\eta = 0.6$ as the default in all other experiments as a conservative choice that still retains strong performance while selecting a meaningfully greedy subset of blocks.
+Table~\ref{tab:eta} and Fig.~\ref{fig:eta} report the iteration count and CPU time as functions of $\eta$. For $\eta \leq 0.5$, TGDBEK selects a large fraction of available blocks per step: the greedy criterion at these thresholds includes nearly all rows and columns, so the composite update spans essentially the full system and convergence is achieved in a single iteration ($\mathrm{IT}=1$). As $\eta$ increases beyond $0.5$, the active set contracts sharply, per-step progress decreases, and both IT and CPU grow substantially. At $\eta = 1.0$ the algorithm degenerates to a TREK-like single-block update, requiring approximately $363$ iterations and over $7\,\mathrm{s}$. These results confirm that the optimal range for $\eta$ lies in $[0.1, 0.6]$. Accordingly, we use $\eta = 0.6$ for the dense overdetermined benchmark (Example~\ref{ex:dense}), where the slightly contracted active set balances per-step cost and iteration count, and $\eta = 0.5$ for the image deblurring experiments (Examples~\ref{ex:color-image}--\ref{ex:gray}), where the larger active sets accelerate convergence on the structured Toeplitz systems.
 
 \begin{table}[ht]
 \centering\small\setlength{\tabcolsep}{6pt}
@@ -861,16 +889,16 @@ Table~\ref{tab:eta} and Fig.~\ref{fig:eta} report the average iteration count an
 \toprule
 $\eta$ & IT & CPU (s) \\
 \midrule
-$0.1$ &  15 & 0.088 \\
-$0.2$ &  18 & 0.051 \\
-$0.3$ &  20 & 0.050 \\
-$0.4$ &  22 & 0.049 \\
-$0.5$ &  25 & 0.049 \\
-$0.6$ &  32 & 0.638 \\
-$0.7$ &  40 & 0.720 \\
-$0.8$ &  55 & 0.982 \\
-$0.9$ &  75 & 1.322 \\
-$1.0$ & 350 & 4.452 \\
+$0.1$ &   1 & 0.039 \\
+$0.2$ &   1 & 0.026 \\
+$0.3$ &   1 & 0.026 \\
+$0.4$ &   1 & 0.027 \\
+$0.5$ &   1 & 0.028 \\
+$0.6$ &  31 & 1.255 \\
+$0.7$ &  43 & 1.578 \\
+$0.8$ &  63 & 1.933 \\
+$0.9$ &  97 & 2.518 \\
+$1.0$ & 363 & 7.953 \\
 \bottomrule
 \end{tabular}
 \caption{Average IT and CPU time of TGDBEK as a function of the greedy threshold $\eta$ ($\fm A\in\mathbb{R}^{500\times20\times10}$, noise $a=10^{-2}$, tol $=10^{-6}$, $20$ runs each).}
@@ -897,7 +925,7 @@ $1.0$ & 350 & 4.452 \\
 \end{figure}
 
 \begin{remark}
-The sharp increase in CPU time between $\eta=0.5$ and $\eta=0.6$ (Table~\ref{tab:eta}) reflects a qualitative change in the active-set size: below $\eta\approx0.5$ the greedy criterion consistently selects a large fraction of the available blocks, enabling bulk progress per step that offsets the overhead of evaluating all block residuals; above $\eta=0.5$ the active set contracts rapidly, and the iteration cost grows as progressively fewer blocks contribute to each update. The practical recommendation is therefore to keep $\eta$ in the range $[0.3, 0.6]$, where both IT and CPU are near-minimal. For problems where per-step cost is the bottleneck (e.g.\ very large tensors), a smaller $\eta$ may be preferable; for problems where iteration overhead dominates, values closer to $0.5$--$0.6$ offer the best trade-off.
+The sharp transition between $\eta=0.5$ (IT$=1$) and $\eta=0.6$ (IT$=31$) in Table~\ref{tab:eta} reflects a qualitative change in the active-set size: at $\eta\leq0.5$ the greedy criterion includes nearly all rows and all column blocks, so each composite update is equivalent to a full-system projection that drives convergence in a single step; at $\eta=0.6$ the active set contracts enough that multiple iterations are required. The practical recommendation is therefore to keep $\eta$ in the range $[0.1, 0.5]$ when iteration count is the priority, or $\eta\approx0.5$--$0.6$ when per-step cost matters. For large tensors where a full-block step is computationally expensive, a slightly larger $\eta$ (e.g.\ $0.6$--$0.7$) offers a better cost--accuracy trade-off.
 \end{remark}
 
 \section{Conclusion}\label{sec:concl}
