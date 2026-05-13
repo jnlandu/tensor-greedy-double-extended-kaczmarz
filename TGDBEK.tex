@@ -113,11 +113,11 @@ Tensor greedy double block extended Kaczmarz method for solving inconsistent ten
 
 \begin{abstract} 
 
-The randomized Kaczmarz method is a widely adopted iterative method for solving  linear systems of equations. To solve large-scale inconsistent linear systems of tensor equations under the t-product, we propose a tensor greedy double block extended Kaczmarz (TGDBEK) method. We prove  theoretically the convergence guarantees and show that the proposed method converges linearly to the minimum-norm least-square solution of the tensor system. Moreover, we assess the performance of the proposed method through several numerical experiments. Compared to existing methods, the TGDBEK does not require predefined partitions of the tensor system and reduces the running time for solving large inconsistent system and requires less iteration.
+The randomized Kaczmarz method is a widely adopted iterative solver for linear systems. Extending this framework to large-scale \emph{inconsistent} tensor linear systems under the t-product, we propose the Tensor Greedy Double Block Extended Kaczmarz (TGDBEK) method. At each iteration, TGDBEK dynamically builds active sets of row and column slices by selecting those with the largest residual, eliminating the need for predefined partitions required by existing block methods such as TREBK, TREGBK, and TREABK. We prove that TGDBEK converges linearly to the minimum-norm least-squares solution $\fm{A}^\dagger * \fm{B}$. Numerical experiments on dense, sparse, and image deblurring benchmarks demonstrate that TGDBEK consistently requires significantly fewer iterations than competing methods: up to $16\times$ fewer than TREK and $3$--$6\times$ fewer than TREBK and TREGBK on dense overdetermined systems. On color image and MRI-like deblurring problems, TGDBEK is the only method to reach the prescribed tolerance within the iteration budget, achieving up to $42\%$ reduction in wall-clock time compared to TREGBK in the high-iteration regime, while remaining numerically stable in cases where TREABK diverges.
 
 \vspace{.5mm} 
 
-{\bf Keywords}. Tensor equations, randomized extended Kaczmarz, tensor greedy randomized Kaczmarz,  t-product.
+{\bf Keywords}. t-product, inconsistent tensor linear systems, greedy block Kaczmarz, extended Kaczmarz method, minimum-norm least-squares, linear convergence, image deblurring.
 
 
 \end{abstract}

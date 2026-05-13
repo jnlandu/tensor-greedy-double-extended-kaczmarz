@@ -1,0 +1,708 @@
+%====================================================
+% GBREK – LaTeX Beamer Template
+%====================================================
+\documentclass[aspectratio=169]{beamer} 
+
+%-------------------------
+% GENERAL PACKAGES
+%-------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}          % nicer font
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{bm}               % bold math
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{subcaption}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{subcaption} % recommended
+% or: \usepackage{subfig}
+
+
+% Optional: algorithm environment
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+
+% \newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+% \newtheorem{corollary}[theorem]{Corollary}
+% \newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+% \newtheorem{definition}[theorem]{Definition}
+% \newtheorem{lemma}[theorem]{Lemma}
+
+
+% --- calligraphic tensors ---
+\newcommand{\mcalA}{\mathcal{A}}
+\newcommand{\mcalB}{\fm B}
+\newcommand{\mcalX}{\mathcal{X}}
+\newcommand{\mcalZ}{\mathcal{Z}}
+\newcommand{\mcalR}{\mathcal{R}}
+\newcommand{\mcalO}{\mathcal{O}} % zero tensor (use \mcalO)
+
+% --- sets / operators ---
+\newcommand{\Null}{\mathrm{Null}}
+\newcommand{\ran}{\mathrm{range}}
+
+
+
+
+ 
+\def\l{\left} 
+\def\r{\right} 
+\def\mbf{\mathbf}
+
+\def\rmf{{\rm F}}
+
+\def\wh{\widehat}
+\def\wt{\widetilde}
+
+\def\bcirc{{\rm bcirc}}
+\def\unfold{{\rm unfold}}
+\def\fold{{\rm fold}} 
+%\def\dia{{\rm diag}}
+\def\rank{{\rm rank}} 
+\def\ran{{\rm range}} 
+\def\nul{{\rm null}}
+\def\sgn{{\rm sgn}} 
+
+
+\def\mcala{\mathcal A}
+\def\mcalb{\mathcal B}
+\def\mcalc{\mathcal C}
+\def\mcale{\mathcal E}
+%\def\mcalg{\mathcal G}
+\def\mcali{\mathcal I}
+\def\mcalw{\mathcal W}
+\def\mcalx{\mathcal X}
+\def\mcaly{\mathcal Y}
+\def\mcalz{\mathcal Z}
+\DeclareMathOperator*{\argmin}{argmin}
+
+\def\mbbe{\mathbb E}
+\def\mbbr{\mathbb R}
+
+\def\dsp{\displaystyle} 
+\def\nn{\nonumber}
+
+\newcommand{\beq}{\begin{equation}}\newcommand{\eeq}{\end{equation}}
+\newcommand{\bit}{\begin{itemize}}\newcommand{\eit}{\end{itemize}}
+\newcommand{\bem}{\begin{bmatrix}}\newcommand{\eem}{\end{bmatrix}}
+
+
+
+%-------------------------
+% THEME & COLORS
+%-------------------------
+% \usetheme{Madrid}             % clean built-in theme
+% \usecolortheme{dolphin}
+
+% % Custom GBREK color palette
+% \definecolor{GBREKBlue}{RGB}{0, 60, 130}   % main accent
+% \definecolor{GBREKGreen}{RGB}{0, 150, 110} % secondary accent
+% \definecolor{GBREKGray}{RGB}{245, 245, 245}
+
+% % Apply colors
+% \setbeamercolor{structure}{fg=GBREKBlue}
+% \setbeamercolor{title}{fg=white,bg=GBREKBlue}
+% \setbeamercolor{frametitle}{fg=white,bg=GBREKBlue}
+% \setbeamercolor{block title}{fg=white,bg=GBREKGreen}
+% \setbeamercolor{block body}{bg=GBREKGray}
+% \setbeamercolor{itemize item}{fg=GBREKBlue}
+% \setbeamercolor{itemize subitem}{fg=GBREKGreen}
+
+% % Remove navigation symbols
+% \setbeamertemplate{navigation symbols}{}
+
+% % Footline with short title + page number
+\setbeamertemplate{footline}{%
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=.8\paperwidth,ht=2.75ex,dp=1.25ex,left]{author in head/foot}%
+      \usebeamerfont{author in head/foot}\hspace*{1em}\insertshorttitle
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.2\paperwidth,ht=2.75ex,dp=1.25ex,right]{date in head/foot}%
+      \usebeamerfont{date in head/foot}\insertframenumber{} / \inserttotalframenumber\hspace*{1em}
+    \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+%-------------------------
+% CUSTOM MACROS
+%-------------------------
+% \newcommand{\R}{\mathbb{R}}
+\newcommand{\GBREK}{\text{GBREK}}
+
+
+
+% --------personal commands ------
+\def\fm#1{\mathcal{#1}}
+\def\m#1{\boldsymbol{#1}}
+\def\mb{\boldsymbol{\beta}}
+\def\b{\beta}
+\def\r{\mathbb{R}}
+\def\tvx{\Tilde{\vx}}
+\def\t#1{\Tilde{#1}}
+\def\pr{Pr}
+\def\EE{\mathbb{E}}
+\def\Ukcol{\mathcal{U}^c_k}
+\def\Ukrow{\mathcal{U}^r_k}
+\def \ajk{\m A_{:, J_{j_k}}}
+\def \aik{\m A_{I_{i_k}, :}}
+\def \ai#1{\m A_{I_{#1}, :}}
+\def \aj#1{\m A_{:,J_{#1}}}
+\def\bik{\m b_{I_{k}}}
+\def \bi#1{\m b_{I_{#1}}}
+\def\zik{\m z_{I_{k}}}
+\def\zi#1{\m z_{I_{#1}}}
+% \def \xk#1#2{\m #1_{:, }}
+
+
+% --------personal commands ------
+\def\fm#1{\mathcal{#1}}
+\def\m#1{\boldsymbol{#1}}
+\def\mb{\boldsymbol{\beta}}
+\def\b{\beta}
+\def\r{\mathbb{R}}
+\def\tvx{\Tilde{\vx}}
+\def\t#1{\Tilde{#1}}
+\def\pr{Pr}
+
+\def \a#1{\fm A_{:, #1, :}}
+\def \b#1{\fm B_{#1, :, :}}
+\def \ai#1{\fm A_{#1, :, :}}
+\def \z#1#2{\fm Z^{(#1)}_{#2, :, :}}
+\def \bp#1{\fm B^{\perp}_{#1, :, :}}
+\def \x#1{\fm X^{(#1)}}
+
+% Short title & author for footer
+\title[TGDBEK]{Proposal 2: Tensor greedy double extended Kaczmarz with t-product for solving large-scale inconsistent linear tensor systems}
+\author[Jeremie Mabiala]{Jeremie Mabiala}
+\institute[AIMS Senegal]{%
+AIMS Senegal
+}
+\date{Feb. 26, 2026} % or conference date
+
+%====================================================
+\begin{document}
+%====================================================
+
+%-------------------------
+% TITLE SLIDE
+%-------------------------
+\begin{frame}
+  \titlepage
+\end{frame}
+
+%-------------------------
+% OUTLINE
+%-------------------------
+\begin{frame}{Outline}
+  \tableofcontents
+\end{frame}
+
+\section{Abstract}
+\begin{frame}{Abstract}
+Tensors are intensively used to represent images, videos, and any higher dimensional object. In image reconstruction, given a blurred and noisy images, the reconstruction of the image can be expressed as a tensor linear systems. In this note, we present a tensor greedy double extended Kaczmarz (TGDBEK) for solving large scale tensor linear systems. Unlike the block-based methods TREBK, TREGBK, TREABK encountered in the literature which more or less require a pred-defined partition of the tensor system, the TGDBEK \textbf{does not require any pre-defined partitions of the tensor systems}. It employs \textbf{the greedy principle on the tensor systems to dynamically construct a relatively small subset of rows and columns slices}. Then updates the iterates  using  a REK update style.  We provide the convergence guarantees of the proposed method. We have sown that the proposed method converges exponentially in expectation to the minimum-norm solutions. Numerical examples are conducted to asses the effectiveness of the proposed method.
+\end{frame}
+
+\section{Notations and preliminaries } 
+\subsection{Tensors \& 3D Tensors}
+\begin{frame}{Tensors \& 3D Tensors}
+We follow the notations and take the concepts from Kilmer et al. \cite{kilmer2013third}.
+\begin{itemize}
+    \item A tensor is a natural generalization of a matrix in higher dimension. See fig. \ref{fig:3d-tensors}.
+    \item We borough our notations from \cite{kilmer2013third, du2021rrek}. We denote tensors by calligraphic letters $\fm A$.
+    \item We only  consider third-order tensors, i.e. $\fm A \in \r^{N_1\times N_2\times N_3}$
+    \item  Given a tensor $\fm A$, let $\m A_i:=\fm A_{:, :, i}$. The block circulant matrix of $\fm A$ is defined as \cite{kilmer2013third}:
+$$
+    \bcirc(\mcala):=\bem\mbf A_1 &\mbf A_{N_3} & \cdots & \mbf A_2\\ \mbf A_2 & \mbf A_1 & \cdots &\mbf A_3\\ \vdots &\vdots & \ddots &\vdots\\ \mbf A_{N_3}& \mbf A_{N_3-1}& \cdots &\mbf A_1\eem\in\mbbr^{N_1N_3\times N_2N_3}.
+$$
+\end{itemize}
+\end{frame}
+
+\begin{frame}{}
+\begin{figure}
+  \centering
+  \begin{subfigure}[b]{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{slides-images/3d-tensor.jpg}
+    % \caption{Caption}
+    % \label{fig:3d-tensor-1}
+  \end{subfigure}\hfill
+  \begin{subfigure}[b]{0.48\linewidth}
+    \centering
+    \includegraphics[width=\linewidth]{slides-images/3d-tensor-2.png}
+    % \caption{Caption}
+    % \label{fig:3d-tensor-2}
+  \end{subfigure}
+  \caption{Illustration of third-order tensors. }
+  \label{fig:3d-tensors}
+\end{figure}
+\end{frame}
+
+
+\begin{frame}{}
+\begin{itemize}
+\item We define the operations $\fold(\cdot)$ and its inverse $\unfold(\cdot)$ as follows:
+$$
+\unfold(\mcala):=\bem\mbf A_1\\ \mbf A_2\\ \vdots\\ \mbf A_{N_3}\eem\in\mbbr^{N_1N_3\times N_2},\qquad \fold\left(\bem\mbf A_1\\ \mbf A_2\\ \vdots\\ \mbf A_{N_3}\eem\right):=\mcala.
+$$ 
+\item In \cite{kilmer2013third}, the authors proposed a \textbf{new tensor to tensor products (named t-product), which allows one to extend matrix linear algebra to tensors}. The following is the definition of the t-product.
+\end{itemize}
+\end{frame}
+\subsection{T-product}
+\begin{frame}{T-product}
+\begin{definition}[1, \cite{kilmer2013third}]
+    For $\mcala\in\mbbr^{N_1\times N_2\times N_3}$ and $\mcalb\in\mbbr^{N_2\times K\times N_3}$, the {\it \textbf{t-product}} between $\mcala$ and $\mcalb $ is  a $ N_1\times K\times N_3$ tensor  defined and denoted  $\mcala*\mcalb$ 
+$$
+\mcala*\mcalb:=\fold(\bcirc(\mcala)\unfold(\mcalb))\in \r^{N_1\times K\times N_3}
+$$
+\end{definition}
+\begin{itemize}
+    \item The product $\bcirc(\mcala) \unfold(\mcalB)$ is a usual matrix product, which results to a  block matrix that we fold to get a 3d tensor.
+    % \item The resulting matrix is a block matrix which then is folded to a tensor.
+\end{itemize}
+\end{frame}
+
+\subsection{Some definitions and properties.}
+\begin{frame}{Some definitions and properties.}
+We summarize below some definitions and properties that we will use in this note.
+\begin{definition}[\cite{kilmer2013third, du2021rrek, an2025randomized}]
+Let $\mcala \in \r^{N_1\times \times N_2 \times N_3}$ and $\mcalb \in \r^{N_2\times K\times N_3}$. Then the t-product between $\fm A $ and $\fm B$ satisfy the following properties
+\begin{enumerate}
+    \item The separability in the first dimension, that is 
+    \begin{align*}
+        \left( \fm A * \fm B\right)_{i, :, :} = \fm A_{i, :, :} * \fm B.
+    \end{align*}
+    \item  The component form decomposition on the second dimension
+    \begin{align}
+        \fm A * \fm B = \sum_{j=1}^{N_2} \fm A_{:, j, :} * \fm B_{j, :, :}.
+    \end{align}
+\end{enumerate}
+\end{definition}
+\end{frame}
+
+\begin{frame}{}
+\begin{definition}[transpose]
+The transpose of $\mcala\in\mbbr^{N_1\times N_2\times N_3}$, denoted by $\mcala^\top$, is the $N_2\times N_1\times N_3$ tensor obtained by transposing each of the frontal slices and then reversing the order of transposed frontal slices $2$ through $N_3$.
+For $\mcala\in\mbbr^{N_1\times N_2\times N_3}$, we have  \beq\label{ttop}\bcirc(\mcala^\top)=(\bcirc(\mcala))^\top.\eeq %and \beq\label{eqj}\mcala*\mcala^\top=\sum_{j=1}^{N_2}\mcala_{:,j,:}*(\mcala_{:,j,:})^\top.\eeq 
+\end{definition}
+\begin{definition}[inner product]
+The inner product between $\mcala$ and $\mcalb$ in $\mbbr^{N_1\times N_2\times N_3}$ is defined as $$\la\mcala,\mcalb\ra:=\sum_{i,j,k}\mcala_{ijk}\mcalb_{ijk}.$$ 
+\end{definition}
+\end{frame}
+
+\begin{frame}{}
+\begin{definition}  For $\fm A \in \r^{N_1 \times N_2 \times N_3}$, its spectral norm and the Frobenius norm are defined as follows
+\begin{align}
+    \Vert \fm A \Vert_2 &  := \Vert \bcirc (\fm A ) \Vert_2\\
+    \Vert \fm A \Vert_F &:= \sqrt{\langle \fm A , \fm A \rangle} = \sqrt{\sum_{i,j,k}}\fm A(i,j,k)^2
+\end{align}
+\end{definition} 
+\begin{lemma}[\cite{kilmer2013third}]
+    For $\fm A\in \r^{N_1\times N_2 \times N_3}$ and $\fm B\in \r^{N_1\times N_2 \times N_3}$, it holds that 
+    \begin{align}
+        \Vert \fm A * \fm B \Vert_F\leq \Vert \fm A \Vert_2 \Vert \fm B \Vert_F
+    \end{align}
+\end{lemma}
+\end{frame}
+\begin{frame}{}
+\begin{definition} For $\fm A\in \r^{N_1\times N_2\times N_3}$, its pseudoinverse, denoted by $\fm A^\dagger$, is the $N_2\times N_1\times N_3$ tensor satisfying
+\begin{align}
+    \bcirc(\fm A^\dagger) = \bcirc(\fm A )^\dagger
+\end{align}
+\end{definition}
+\begin{lemma} For $\fm A\in \r^{N_1\times N_2\times N_3}$ and  $\fm B\in \r^{N_2\times K\times N_3}$, the following holds
+\begin{align}
+\fm A^\top * \fm A * \fm A^\dagger* \fm B = \fm A^\top * \fm B
+\end{align}
+\end{lemma}
+In fact, we know that  $\fm A * \fm A^\top $ is symmetric, $\fm A * \fm A^\dagger * \fm A = \fm A$ and $(\fm A^\dagger)^\top = (\fm A^\top)^\dagger $. We have
+\begin{align*}
+    \fm A^\top * \fm A * \fm A^\dagger * \fm B  = \fm A^\top *\fm (A^\dagger)^\top * \fm A^\top  * \fm B = \fm A^\top * (\fm A^\top)^\dagger * \fm A = \fm A^\top * \fm B
+\end{align*}
+\end{frame}
+\begin{frame}{}
+\begin{lemma}
+For $\fm A\in \r^{N_1\times N_2\times N_3}$ and $\fm X\in $ range($\fm A$),  the following holds 
+\begin{align}
+    \Vert \fm A^\top * \fm X \Vert_F^2 &  \geq \sigma_{\min}^2(\bcirc(\fm A))\Vert \fm X \Vert_F^2
+\end{align}
+With the algebra defined above, it becomes clear that the t-product is for tensors what the product (composition) os for matrices.
+\end{lemma}
+\end{frame}
+
+\section{Problem \& Literature }
+% --------------------------------------------------
+%  Litterature and the problem 
+% -------------------------------------------------
+\subsection{Problem \& Literature }
+\begin{frame}{Problem \& Literature }
+\begin{itemize}
+    \item We aim to solve the linear system of the form
+    \begin{align}
+        \label{eq:eq-1}
+            \fm A * \fm X =  \fm B, \; \fm B = \overline{\fm B} + \varepsilon
+\end{align}
+where $\varepsilon$ is a noisy, and $\overline{\fm B}$ is the clean right-hand side. 
+\item This problem arises in image reconstruction \cite{kilmer2013third, du2021rrek,an2025randomized}.
+\item To solve this problem, Guang-Xin Huang and collaborators in \cite{huang2024tensor} proposed block-based tensor randomized extended  Kaczmarz methods, namely TREBK, TREGBK.
+\item Unlike the TREBK, the TREGBK uses a greedy strategy which \textbf{discriminates blocks}  and  projects the current iterate  on a set of block whose Frobenius norm is bigger than some threshold.
+\end{itemize}
+\end{frame}
+\begin{frame}{}
+\begin{itemize}
+    \item Subsequently, Liyuan Ann et al. \cite{an2025randomized} adapted recently the randomized extended average block Kaczmarz (REABK) by  Du et al. \cite{du2020randomized} to the tensor framework under the t-product to obtain the tensor randomized extended average Kaczmarz (TREABK).
+    \item Unlike the TREGBK or TREBK, the TREABK doesn't project the current iterates on the block hyperplanes forming the selected block. But, it uses a weighted convex combination of projection the the current iterate on each selected hyperplane. 
+\end{itemize}
+\end{frame}
+
+\begin{frame}[t]{}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.05}
+\begin{center}
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}l@{}}
+\toprule
+{\bf Algorithm 1:} Tensor randomized extended block Kaczmarz (TREBK)\\
+\midrule
+{\bf From:} Tensor randomized extended Kaczmarz methods for large inconsistent tensor\\
+\quad\quad\,\, equations with t-product\\[2pt]
+{\bf Require:} $\mathcal{A} \in \mathbb{C}^{m\times l\times n}$, $\mathcal{B} \in \mathbb{C}^{m\times p\times n}$, the maximum number of iterations $T$.\\
+{\bf Ensure:} the approximation solution $\mathcal{X}^k$ of $\mathcal{A}*\mathcal{X} = \mathcal{B}$.\\
+1: Let $\{I_1, I_2, \cdots, I_s\}$ and $\{J_1, J_2, \cdots, J_t\}$ be partitions of $[m]$ and $[l]$, respectively.\\
+2: Initialize $\mathcal{X}^0 = 0$ and $\mathcal{Z}^0 = \mathcal{B}$.\\
+3: {\bf for} $k = 1, 2, \cdots, T$ {\bf do}\\
+4: \quad Pick $j \in [t]$ with probability $\displaystyle\frac{\|\mathcal{A}_{:,J_j,:}\|_{\text{F}}^2}{\|\mathcal{A}\|_{\text{F}}^2}$,\\[8pt]
+5: \quad $\displaystyle\mathcal{Z}^k = \mathcal{Z}^{k-1} - \mathcal{A}_{:,J_j,:}(\mathcal{A}_{:,J_j,:})^\dagger \mathcal{Z}^{k-1}$,\\[8pt]
+6: \quad Pick $i \in [s]$ with probability $\displaystyle\frac{\|\mathcal{A}_{I_i,:,:}\|_{\text{F}}^2}{\|\mathcal{A}\|_{\text{F}}^2}$,\\[8pt]
+7: \quad $\displaystyle\mathcal{X}^k = \mathcal{X}^{k-1} - (\mathcal{A}_{I_i,:,:})^\dagger(\mathcal{A}_{I_i,:,:}*\mathcal{X}^{k-1} - \mathcal{B}_{I_i,:,:} + \mathcal{Z}^k_{I_i,:,:})$.\\[4pt]
+8: {\bf end for}\\
+\bottomrule
+\end{tabular*}
+\end{center}
+\end{frame}
+
+\begin{frame}[t]{}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.05}
+\begin{center}
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}l@{}}
+\toprule
+{\bf Algorithm 2:} Tensor Randomized Extended Greedy Block Kaczmarz (TREGBK)\\
+\midrule
+{\bf Require:} $\mathcal{A} \in \mathbb{C}^{m\times l\times n}$, $\mathcal{B} \in \mathbb{C}^{m\times p\times n}$, the maximum number of iterations $T$, $\delta \in (0, 1]$.\\
+{\bf Ensure:} the approximation solution $\mathcal{X}^k$ of $\mathcal{A}*\mathcal{X} = \mathcal{B}$.\\
+1: Let $\{I_1, I_2, \cdots, I_s\}$ be partitions of $[m]$.\\
+2: Initialize $\mathcal{X}^0 = 0$ and $\mathcal{Z}^0 = \mathcal{B}$.\\
+3: {\bf for} $k = 1, 2, \cdots, T$ {\bf do}\\
+4: \quad Compute the target block $\tau_k$ of positive integers\\[4pt]
+\quad\quad $\displaystyle\tau_j = \left\{ j \mid \|(\mathcal{A}*\mathcal{Z})_{:,j,:}\|_{\text{F}}^2 \geq \delta \cdot \max_{1\leq i\leq l} \|(\mathcal{A}*\mathcal{Z})_{:,i,:}\|_{\text{F}}^2 \right\}$,\\[8pt]
+5: \quad $\displaystyle\mathcal{Z}^k = \mathcal{Z}^{k-1} - \mathcal{A}_{:,\tau_j,:}(\mathcal{A}_{:,\tau_j,:})^\dagger \mathcal{Z}^{k-1}$,\\[8pt]
+6: \quad Pick $i \in [s]$ with probability $\displaystyle\frac{\|\mathcal{A}_{I_i,:,:}\|_{\text{F}}^2}{\|\mathcal{A}\|_{\text{F}}^2}$,\\[8pt]
+7: \quad $\displaystyle\mathcal{X}^k = \mathcal{X}^{k-1} - (\mathcal{A}_{I_i,:,:})^\dagger(\mathcal{A}_{I_i,:,:}*\mathcal{X}^{k-1} - \mathcal{B}_{I_i,:,:} + \mathcal{Z}^k_{I_i,:,:})$.\\[4pt]
+8: {\bf end for}\\
+\bottomrule
+\end{tabular*}
+\end{center}
+\end{frame}
+
+
+\begin{frame}[t]{}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.05}
+\begin{center}
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}l@{}}
+\toprule
+{\bf Algorithm 3:} Tensor  randomized  extended  average block Kaczmarz (TREABK)\\
+\midrule
+{\bf Input:} Let $\{\mathcal{I}_1, \mathcal{I}_2, \cdots, \mathcal{I}_s\}$ and $\{\mathcal{J}_1, \mathcal{J}_2, \cdots, \mathcal{J}_t\}$ be partitions of $[N_1]$ and $[N_2]$.\\
+\quad\quad\, Let $\alpha > 0$. Initialize $\mathcal{Z}^{(0)} = \mathcal{B}$, $\mathcal{X}^{(0)} \in \text{range}(\mathcal{A}^\top)$.\\
+{\bf for} $k=0,1,2,\ldots,\text{maxiter}$ {\bf do}\\
+\quad Pick $j \in [t]$ with probability $\displaystyle\frac{\|\mathcal{A}_{:,\mathcal{J}_j,:}\|_{\text{F}}^2}{\|\mathcal{A}\|_{\text{F}}^2}$.\\[8pt]
+\quad Set $\displaystyle\mathcal{Z}^{(k+1)} = \mathcal{Z}^{(k)} - \alpha\frac{\mathcal{A}_{:,\mathcal{J}_j,:}*(\mathcal{A}_{:,\mathcal{J}_j,:})^\top * \mathcal{Z}^{(k)}}{\|(\mathcal{A}_{:,\mathcal{J}_j,:})^\top\|_{\text{F}}^2}$.\\[8pt]
+\quad Pick $i \in [s]$ with probability $\displaystyle\frac{\|\mathcal{A}_{\mathcal{I}_i,:,:}\|_{\text{F}}^2}{\|\mathcal{A}\|_{\text{F}}^2}$.\\[8pt]
+\quad Set $\displaystyle\mathcal{X}^{(k+1)} = \mathcal{X}^{(k)} - \alpha\frac{(\mathcal{A}_{\mathcal{I}_i,:,:})^\top * (\mathcal{A}_{\mathcal{I}_i,:,:}*\mathcal{X}^{(k)} - \mathcal{B}_{\mathcal{I}_i,:,:} + \mathcal{Z}_{\mathcal{I}_i,:,:}^{(k+1)})}{\|\mathcal{A}_{\mathcal{I}_i,:,:}\|_{\text{F}}^2}$.\\[4pt]
+{\bf end for}\\
+\bottomrule
+\end{tabular*}
+\end{center}
+\end{frame}
+
+\begin{frame}{}
+\begin{itemize}
+    \item The averaging idea intends to ameliorate the convergence of the TREABK compare to TREBK and TREGBK, as was the authors in \cite{an2025randomized} observed.
+    \item What these methods have in common is the fact the require a  \textbf{predefined partition of the tensor systems}.
+    \item The partition choice can affect the performance of the methods, as blocks can differ one to an other.
+    \item the TREGBK introduces greedy block sampling. One of the advantages of using a greedy technique is it specifies a discrimination criterion on (blocks of) hyperplanes, inform the method to only project on the "best" of those. It likely results to less running time and less iteration. Hence, a better convergence decay \cite{bai2018greedy, bai2021greedy} compared to non-greedy methods.
+\end{itemize}
+\end{frame}
+
+
+\section{Proposed method: Tensor greedy double  block extended Kaczmarz}
+\subsection{TGDBEK algorithm}
+\begin{frame}[t]{TGDBEK algorithm}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\renewcommand{\arraystretch}{1.05}
+
+\begin{center}
+\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}l@{}}
+\toprule
+{\bf Algorithm 4:} Tensor Greedy Double Block Extended Kaczmarz (TGDBEK)\\
+\midrule
+{\bf Input:} $\mathcal{A}\!\in\!\mathbb{R}^{N_1\times N_2\times N_3}$, $\mathcal{B}\!\in\!\mathbb{R}^{N_1\times K\times N_3}$, iters $\ell$, $\eta\in(0,1]$.\\
+{\bf Init:} $\mathcal{X}^{(0)}=\mathcal{O}$, $\mathcal{Z}^{(0)}=\mathcal{B}$.\\
+{\bf for} $k=0,1,\ldots,\ell-1$ {\bf do}\\
+\quad $\displaystyle \varepsilon_k^{z}=\eta\max_{j\in[N_2]}
+\frac{\|(\mathcal{A}_{:,j,:})^\top * \mathcal{Z}^{(k)}\|_{F}^2}{\|\mathcal{A}_{:,j,:}\|_{F}^2}$\\[-0.2em]
+\quad $\displaystyle U_k=\Big\{j\in[N_2]:\|(\mathcal{A}_{:,j,:})^\top * \mathcal{Z}^{(k)}\|_{F}^2\ge
+\varepsilon_k^{z}\|\mathcal{A}_{:,j,:}\|_{F}^2\Big\}$\\[-0.2em]
+\quad $\displaystyle \mathcal{Z}^{(k+1)}=\mathcal{Z}^{(k)}-\mathcal{A}_{:,U_k,:}*(\mathcal{A}_{:,U_k,:})^\dagger*\mathcal{Z}^{(k)}$\\[-0.1em]
+\quad $\displaystyle \varepsilon_k^{x}=\eta\max_{i\in[N_1]}
+\frac{\|\mathcal{B}_{i,:,:}-\mathcal{Z}^{(k+1)}_{i,:,:}-\mathcal{A}_{i,:,:}*\mathcal{X}^{(k)}\|_{F}^2}{\|\mathcal{A}_{i,:,:}\|_{F}^2}$\\[-0.2em]
+\quad $\displaystyle J_k=\Big\{i\in[N_1]:\|\mathcal{B}_{i,:,:}-\mathcal{Z}^{(k+1)}_{i,:,:}-\mathcal{A}_{i,:,:}*\mathcal{X}^{(k)}\|_{F}^2\ge
+\varepsilon_k^{x}\|\mathcal{A}_{i,:,:}\|_{F}^2\Big\}$\\[-0.2em]
+\quad $\displaystyle \mathcal{X}^{(k+1)}=\mathcal{X}^{(k)}+(\mathcal{A}_{J_k,:,:})^\dagger*
+\Big(\mathcal{B}_{J_k,:,:}-\mathcal{Z}^{(k+1)}_{J_k,:,:}-\mathcal{A}_{J_k,:,:}*\mathcal{X}^{(k)}\Big)$\\
+{\bf end}\\
+\bottomrule
+\end{tabular*}
+\end{center}
+\end{frame}
+\begin{frame}{}
+\begin{itemize}
+    \item  The TGDEBK uses the whole tensors systems. \textbf{No prior partitions of the row and column slices}.
+    \item We also observe that TGDBEK doesn't need a random sampling of blocks, unlike TREABK, TREBK, TREGBK.
+    \item Furthermore, TGDBEK maintains the same update style as  REK or like in TREABK above.  
+    % \item The GDBEK was introduced in \cite{an2024randomized}. 
+\end{itemize}
+\end{frame}
+\subsection{Convergence theorem}
+\begin{frame}{Convergence theorem}
+
+\begin{theorem} Assume the system  \eqref{eq:eq-1} is inconsistent and let $\fm B^\perp := \fm B - \fm A \fm A^\dagger \fm B$. The tensor sequence $\fm X^{(k)}$ generated  by TGDBEK algorithm  converges to the  tensor least-square solution $\fm X_\ast = \fm A^\dagger * \fm B$. Moreover, for $k\geq 1$, the following holds
+\begin{align}
+    \Vert \fm X ^{(k+1)} - \fm X_\ast \Vert_F^2 \leq \alpha^{k+1}\Vert \fm X_0 - \fm X_\ast \Vert_F^2 + \frac{\alpha^{k+1}-\beta^{k+1}}{\alpha - \beta}\Vert \fm B^\perp \Vert_F^2
+\end{align}
+where $ \alpha = 1 - \theta \frac{\sigma_{\min}^2(\bcirc(\fm A^\top))}{\sigma^2_{\max}(\bcirc(\fm A^\top ))}$, $\beta = 1- \frac{\sigma^2_{\max}(\fm A)}{\Vert \fm A \Vert^2_F - \Vert \fm A(\overline{U}) \Vert_F^2}$, $\gamma = \sigma^2_{\min}(\fm A^{\fm J}), \; \theta \in (0,1]$ and $\eta \in (0, 1]$.
+\end{theorem} 
+\end{frame}
+\begin{frame}{}
+    \begin{proof} From Lemma 5, we obtain 
+\begin{align*}
+    \fm A^\top *\fm B^\perp  =\fm A^\top  *\fm B - \fm A^\top * \fm A * \fm A^\dagger * \fm B =\fm A ^\top * \fm B  - \fm A ^\top * \fm B = 0
+\end{align*}
+In particular, for any $U_k \subset [N_2]$  we get $\fm A(:, U_k, :)^\top \fm B^\perp = 0$.
+Now, using the fact $\fm A * \fm A^\dagger = \left(\fm A * \fm  A^\dagger \right)^\top = (\fm A^\dagger)^\top * \fm A ^\top = (\fm A^\top )^\dagger * \fm A^\top   $  and the $z$-update in Alg 1, we can get
+\begin{align*}
+    \fm Z^{(k+1)} - \fm B^\perp  & = \left(\fm Z^{(k)} - \fm B^\perp\right) - \left(\fm A^\top_{:, {U_k}, :} \right)^\dagger* \fm A^\top_{:, U_k, :} *\left( \fm Z ^{(k)}-\fm B^\perp \right)\\
+    & = \left(\fm I_{:, U_k, :} - \left( \a{U_k}^\top\right) ^\dagger \a{U_k}^\top\right)*\left( \fm Z^{(k)}- \fm B^\perp \right).
+\end{align*}
+Since $\left( \a{U_k}^\top\right) ^\dagger \a{U_k}^\top$  is a $t-$ tensor projector,  using the Pythagorean theorem,  we can obtain
+
+\end{proof}
+\end{frame}
+
+\begin{frame}{}
+\begin{align}
+    \Vert   \fm Z^{(k+1)} - \fm B^\perp  \Vert_F^2  = \Vert  \fm Z^{(k)} - \fm B^\perp  \Vert_F^2 - \Vert  \left(\fm A^\top_{:, {U_k}, :} \right)^\dagger* \fm A^\top_{:, U_k, :} *\left( \fm Z ^{(k)}-\fm B^\perp \right) \Vert_F^2. \label{eq:eq-1b}
+\end{align}
+Using Lemma (), we  note that 
+\begin{align}
+    \Vert \left(\a{U_k}^\top \right)^\dagger * \a{U_k}^\top *\left(\fm Z^{(k)}-\fm B^\perp \right) \Vert_F^2 & =  \Vert \left(\a{U_k}^\top \right)^\dagger * \a{U_k}^\top *\fm Z^{(k)}\Vert_F^2 \notag\\
+    & \geq \sigma_{\min}^2((\a{U_k}^\top) ^\dagger)\Vert \a{U_k}^\top * \fm Z^{(k)} \Vert_F^2 \notag\\
+    & = \sigma_{\min}^2(\bcirc(\a{U_k}^\top) ^\dagger) \sum_{j\in U_k} \Vert \a j ^\top * \fm Z^{(k)} \Vert_F^2 \notag\\
+    & \geq \sigma_{\min}^2(\bcirc(\a{U_k}^\top) ^\dagger) \epsilon^z_k \Vert \a{U_k} \Vert_F^2 \notag\\
+    & =  \frac{\Vert \a{U_k} \Vert_F^2}{\sigma_{\max}^2(\bcirc(\a{U_k}^\top))} \epsilon_k^z .\label{eq:eq-2}
+\end{align}
+Now,  using the  lemma (), we observe that
+\begin{align*}
+    \a{U_{k-1}}^\top \fm Z^{(k)} & = \a{U_{k-1}}^\top \left( \fm Z^{(k-1)} - \a{U_{k-1}}*\a{U_{k-1}}^\dagger \fm Z^{k-1} \right)\\
+    & =  \a{U_{k-1}}^\top*\fm Z^{(k-1)} - \a{U_{k-1}}^\top *\a{U_{k-1}}\a{U_{k-1}}^\dagger* \fm Z^{k-1} = \fm O, 
+\end{align*}
+% so that for all $k=0, 1, \ldots,$, we can get
+\end{frame}
+\begin{frame}{}
+so that for all $k=0, 1, \ldots,$, we can get
+\begin{align*}
+    \Vert \fm A^\top \fm Z^{(k)}\Vert_F^2  & = \sum_{j \in U_k} \Vert \a j ^\top  * \fm Z^{(k)} \Vert_F^2 + \sum_{j\in U^c_{k-1}}\Vert \a j ^\top  * \fm Z^{(k)} \Vert_F^2 \\
+    &=  \sum_{j\in U^c_{k-1}}\Vert \a j ^\top  * \fm Z^{(k)} \Vert_F^2  =  \sum_{j\in U^c_{k-1}} \frac{ \Vert \a j ^\top  * \fm Z^{(k)} \Vert_F^2}{ \Vert \a j \Vert_F^2}\Vert \a j \Vert_F^2\\
+    & \leq \max_{j \in [N_2]}\left\{  \frac{ \Vert \a j ^\top  * \fm Z^{(k)} \Vert_F^2}{ \Vert \a j \Vert_F^2} \right\}\left(\Vert \fm A \Vert_F^2 - \Vert \a{U_k} \Vert_F^2 \right).
+\end{align*}
+Hence
+\begin{align}
+    \epsilon^z_k = \eta \max_{j \in [N_2]}\left\{  \frac{ \Vert \a j ^\top  * \fm Z^{(k)} \Vert_F^2}{ \Vert \a j \Vert_F^2} \right\} &\geq \eta \frac{ \Vert \fm A^\top \fm Z^{(k)}\Vert_F^2}{\Vert \fm A \Vert_F^2 - \Vert \a{U_k} \Vert_F^2} \notag\\
+    & \geq \eta\frac{ \sigma_{\min}^2(\bcirc(\fm A^\top)) \Vert \fm Z^{(k)}-\fm B^\perp \Vert_F^2}{\Vert \fm A \Vert_F^2 - \Vert \a{U_k} \Vert_F^2},  \label{eq:eq-3}
+\end{align}
+where in the last inequality we used $ \Vert \fm A^\top *  \fm Z^{(k)}\Vert_F^2 =  \Vert \fm A^\top * \left( \fm Z^{(k)} - \fm B^\perp \right)\Vert_F^2 \geq \sigma_{\min}^2(\bcirc(\fm A^\top)) \Vert \fm Z^{(k)}-\fm B^\perp \Vert_F^2 $.   
+\end{frame}
+\begin{frame}{}
+ Substitute \eqref{eq:eq-3} in \eqref{eq:eq-2} we can obtain
+\begin{align}
+     \Vert \left(\a{U_k}^\top \right)^\dagger * \a{U_k}^\top *\left(\fm Z^{(k)}-\fm B^\perp \right) \Vert_F^2 & \geq \frac{\eta \Vert \a{U_k} \Vert_F^2}{\Vert \fm A \Vert_F^2 - \Vert \a{U_k} \Vert_F^2} \frac{\sigma_{\min}^2(\bcirc(\fm A^\top)) \Vert \fm Z^{(k)}-\fm B^\perp \Vert_F^2}{\sigma_{\max}^2(\bcirc(\a{U_k}^\top))}. \label{eq:eq-4}
+\end{align}
+Let $\Vert \a{\overline{U}} \Vert_F^2 := \max_k \{ \Vert \a{U_k}\Vert_F^2\}$ so that, combining \eqref{eq:eq-1b} and  \eqref{eq:eq-4} above, we can finally obtain the upper bound
+\begin{align}
+     \Vert   \fm Z^{(k+1)} - \fm B^\perp  \Vert_F^2  & \leq  \left( 1 - \frac{\eta \Vert \a{U_k} \Vert_F^2}{ \sigma_{\max}^2(\bcirc(\a{U_k}^\top)) } \frac{\sigma_{\min}^2(\bcirc(\fm A^\top))}{\Vert \fm A \Vert_F^2 - \Vert \a{\overline{U}} \Vert_F^2}   \right) \Vert  \fm Z^{(k)} - \fm B^\perp \Vert_F^2  \notag \\
+     & \leq \left( 1 - \eta  \frac{\sigma_{\min}^2(\bcirc(\fm A^\top))}{\Vert \fm A \Vert_F^2 - \Vert \a{\overline{U}} \Vert_F^2}   \right) \Vert  \fm Z^{(k)} - \fm B^\perp \Vert_F^2 .
+\end{align}
+where  in the last inequality we used the fact that $\frac{\Vert \a{U_k}\Vert_F^2 }{\sigma_{\max}^2(\bcirc(\a{U_k}))}\geq 1$. The fact that  we can decompose $\b{J_k} = \ai{J_k}*\fm X^\ast + \bp{J_k} $, we can rewrite the the $x-$ update as,
+\begin{align*}
+   \fm X^{(k+1)} = \x k - \ai{J_k}^\dagger * \left( \a{J_k} *\left(\x k - \fm X^\ast \right) + \left(\z{k+1}{J_k} - \bp{J_k}  \right)\right)
+\end{align*}   
+\end{frame}
+\begin{frame}{}
+\scriptsize
+Subtracting $\fm X_\ast$  both sides  in the equality above, we obtain
+\begin{align}
+   \x {k+1} - \fm X_\ast  & =  \x{k} - \fm X_\ast  - \ai{J_k}^\dagger * \left( \a{J_k} *\left(\x k - \fm X^\ast \right) + \left(\z{k+1}{J_k} - \bp{J_k}  \right)\right) \notag\\
+   & =  \left( \fm I - \ai{J_k}^\dagger *  \a{J_k} \right) *\left(\x k - \fm X^\ast   \right) +  \ai{J_k}^\dagger* \left(\z{k+1}{J_k} - \bp{J_k}  \right)
+\end{align}
+Again $\a{J_k}^\dagger \a{J_k}$ is a $t-$ orthogonal projector  (slice-wise  orthogonal in the Fourier  domain), hence the two terms are orthogonal in the Frobenius norm. Therefore,  from the  Pythagorean theorem , we can obtain
+\begin{align}
+    \Vert \x{k+1} - \fm X_\ast \Vert_F^2 = \Vert \left( \fm I - \ai{J_k}^\dagger *  \a{J_k} \right) *\left(\x k - \fm X^\ast   \right) \Vert_F^2  +  \Vert  \ai{J_k}^\dagger* \left(\z{k+1}{J_k} - \bp{J_k}  \right) \Vert_F^2  \label{eq:eq-5}
+\end{align}
+Let  $\x{k}-\fm X_\ast = \left( \x{k} - \fm X_\ast \right)_{\text{R}((\a{J_k})^\top)} + \left(\x k - \fm X_\ast \right)_{\text{R}((\a{J_k})^\top)^\perp }$ and $\Vert \left( \x{k} - \fm X_\ast \right)_{\text{R}((\a{J_k})^\top)} \Vert_F^2  = \theta_k \Vert \x k - \fm X_\ast \Vert_F^2$. Then, using the Pythagorean theorem and the  Lemma (), we get : 
+\end{frame}
+
+\begin{frame}{}
+\scriptsize
+\begin{align}
+\Vert \left( \fm I - \ai{J_k}^\dagger *  \a{J_k} \right) *\left(\x k - \fm X^\ast   \right) \Vert_F^2  & = \Vert \x k - \fm X_\ast \Vert_F^2 - \Vert  \ai{J_k}^\dagger *  \a{J_k}  *\left(\x k - \fm X^\ast   \right) \Vert_F^2  \notag\\
+& \leq  \Vert \x k - \fm X_\ast \Vert_F^2  \notag\\
+& -\sigma_{\min}^2(\a{J_k}^\dagger) \sigma_{\min}^2(\a{J_k}) \Vert\left( \x{k} - \fm X_\ast \right)_{\text{R}((\a{J_k})^\top)} \Vert_F^2 \notag\\
+& = \left( 1 - \theta_k \frac{\sigma_{\min}^2(\bcirc(\a{J_k}))}{\sigma^2_{\max}(\a{J_k})}\right) \Vert \x k - \fm X_\ast \Vert_F^2 \notag  \\
+& \leq \left( 1 - \theta \frac{\sigma_{\min}^2(\bcirc(\a{J}))}{\sigma^2_{\max}(\a{J})}\right) \Vert \x k - \fm X_\ast \Vert_F^2 \label{eq:eq-6}, 
+\end{align}
+where we denote $J = \{J_0, 1, \ldots, J_k \}$ and $\theta:= \min_{k} \{\theta_k \}$, and $\a{J}$ the stacked or the union block of tensors  $\a{J_k}$. For the second term,  we first note that $\Vert \fm A^\dagger \fm X \Vert_F \leq \Vert \fm A ^\dagger \Vert_2^2 \Vert \fm X \Vert_F^2$.
+    
+\end{frame}
+\begin{frame}{}
+\scriptsize
+Then, we obtain
+\begin{align}
+  \Vert  \ai{J_k}^\dagger* \left(\z{k+1}{J_k} - \bp{J_k}  \right) \Vert_F^2  & \leq \sigma_{\max}^2((\a{J_k})^\dagger) \Vert  \z{k+1}{J_k} - \bp{J_k} \Vert_F^2 \notag\\
+  & = \frac{1}{\sigma_{\min}^2(\a{J_k})} \Vert  \z{k+1}{J_k} - \bp{J_k} \Vert_F^2.
+  \label{eq:eq-7}
+\end{align}
+It results from  \eqref{eq:eq-5}, \eqref{eq:eq-6}, and \eqref{eq:eq-7} that
+\begin{align*}
+ & \Vert \x{k+1} - \fm X_\ast \Vert_F^2 \\
+ &  \leq \left( 1 - \theta \frac{\sigma_{\min}^2(\bcirc(\a{J}))}{\sigma^2_{\max}(\a{J})}\right) \Vert \x k - \fm X_\ast \Vert_F^2 +  \frac{1}{\sigma_{\min}^2(\a{J_k})} \Vert  \z{k+1}{J_k} - \bp{J_k} \Vert_F^2\\
+ & \leq \left( 1 - \theta \frac{\sigma_{\min}^2(\bcirc(\a{J}))}{\sigma^2_{\max}(\a{J})}\right) \Vert \x k - \fm X_\ast \Vert_F^2 + \frac{1}{\sigma_{\min}^2(\a{J_k})} \left( 1 - \eta  \frac{\sigma_{\min}^2(\bcirc(\fm A^\top))}{\Vert \fm A \Vert_F^2 - \Vert \a{\overline{U}} \Vert_F^2}   \right) \Vert  \fm Z^{(k)} - \fm B^\perp \Vert_F^2 .
+\end{align*}
+\end{frame}
+\begin{frame}{}
+\scriptsize
+It results from  \eqref{eq:eq-5}, \eqref{eq:eq-6}, and \eqref{eq:eq-7} that
+\begin{align*}
+ & \Vert \x{k+1} - \fm X_\ast \Vert_F^2 \\
+ &  \leq \left( 1 - \theta \frac{\sigma_{\min}^2(\bcirc(\a{J}))}{\sigma^2_{\max}(\a{J})}\right) \Vert \x k - \fm X_\ast \Vert_F^2 +  \frac{1}{\sigma_{\min}^2(\a{J_k})} \Vert  \z{k+1}{J_k} - \bp{J_k} \Vert_F^2\\
+ & \leq \left( 1 - \theta \frac{\sigma_{\min}^2(\bcirc(\a{J}))}{\sigma^2_{\max}(\a{J})}\right) \Vert \x k - \fm X_\ast \Vert_F^2 + \frac{1}{\sigma_{\min}^2(\a{J_k})} \left( 1 - \eta  \frac{\sigma_{\min}^2(\bcirc(\fm A^\top))}{\Vert \fm A \Vert_F^2 - \Vert \a{\overline{U}} \Vert_F^2}   \right) \Vert  \fm Z^{(k)} - \fm B^\perp \Vert_F^2 .
+\end{align*}
+    
+\end{frame}
+\begin{frame}{}
+To ease the notation, let $\alpha =  1 - \theta \frac{\sigma_{\min}^2(\bcirc(\a{J}))}{\sigma^2_{\max}(\a{J})}$, $\beta = 1 - \eta  \frac{\sigma_{\min}^2(\bcirc(\fm A^\top))}{\Vert \fm A \Vert_F^2 - \Vert \a{\overline{U}} \Vert_F^2}  $, \; $\gamma =\frac{1}{\sigma_{\min}^2(\a{J_k})}$. Then, induction over $k$ yields
+\begin{align*}
+    \Vert \x{k+1} - \fm X_\ast \Vert_F^2  & \leq \alpha  \Vert \x k - \fm X_\ast \Vert_F^2 + \frac{1}{\gamma}\beta \Vert \fm Z^{(k)} - \fm B^\perp \Vert_F^2\\
+    & \leq \alpha \left( \alpha  \Vert \x k - \fm X_\ast \Vert_F^2 + \frac{1}{\gamma}\beta \Vert \fm Z^{(k)} - \fm B^\perp \Vert_F^2 \right) + \beta^2 \frac{1}{\gamma} \Vert \fm Z^{(k-1)} - \fm B^\perp \Vert_F^2\\
+    &\vdots\\
+    & \leq \alpha^{k+1} \Vert \x 0 - \fm X_\ast \Vert_F^2  + \frac{1}{\gamma}\sum_{l=0}^k \alpha^{l} \beta^{k-l+1}  \Vert \fm Z^{(k-1)} - \fm B^\perp \Vert_F^2\\
+    &\leq \alpha^{k+1} \Vert \x 0 - \fm X_\ast \Vert_F^2 + \frac{\alpha^{k+1} -\beta^{k+1}}{\alpha - \beta} \frac{\beta}{\alpha}\Vert \fm B_{R(\fm A)}\Vert_F^2
+\end{align*}
+
+
+\end{frame}
+
+% ----------------------------------------------------------------
+%  Ideas to experiment later 
+% ------------------------------------------------------------------
+% \section{Proposed method  2: A randomized version of TGDBEK}
+
+% \begin{frame}[t]{Tensor  randomized greedy double block extended}
+% \scriptsize
+% \setlength{\tabcolsep}{2pt}
+% \renewcommand{\arraystretch}{1.05}
+
+% \begin{center}
+% \begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}l@{}}
+% \toprule
+% {\bf Algorithm 1:} Tensor Random Greedy Double Block Extended Kaczmarz (TRGDBEK)\\
+% \midrule
+% {\bf Input:} $\mathcal{A}\!\in\!\mathbb{R}^{N_1\times N_2\times N_3}$, $\mathcal{B}\!\in\!\mathbb{R}^{N_1\times K\times N_3}$, iters $\ell$, $\eta\in(0,1]$.\\
+% {\bf Init:} $\mathcal{X}^{(0)}=\mathcal{O}$, $\mathcal{Z}^{(0)}=\mathcal{B}$.\\
+% {\bf for} $k=0,1,\ldots,\ell-1$ {\bf do}\\
+% \quad $\displaystyle \varepsilon_k^{z}=\eta\max_{j\in[N_2]}
+% \frac{\|(\mathcal{A}_{:,j,:})^\top * \mathcal{Z}^{(k)}\|_{F}^2}{\|\mathcal{A}_{:,j,:}\|_{F}^2}$\\[-0.2em]
+% \quad $\displaystyle U_k=\Big\{j\in[N_2]:\|(\mathcal{A}_{:,j,:})^\top * \mathcal{Z}^{(k)}\|_{F}^2\ge
+% \varepsilon_k^{z}\|\mathcal{A}_{:,j,:}\|_{F}^2\Big\}$\\[-0.2em]
+% \quad $\displaystyle \mathcal{Z}^{(k+1)}=\mathcal{Z}^{(k)}-\mathcal{A}_{:,U_k,:}*(\mathcal{A}_{:,U_k,:})^\dagger*\mathcal{Z}^{(k)}$\\[-0.1em]
+% \quad Let $J_k = [\vert U_k \vert]$ and sample $\vert J_k\vert$ row slices with proba. $\Vert \ai{U_k}\Vert_F^2/\Vert \fm A \Vert_F^2$.\\
+% % \quad $\displaystyle \varepsilon_k^{x}=\eta\max_{i\in[N_1]}
+% % \frac{\|\mathcal{B}_{i,:,:}-\mathcal{Z}^{(k+1)}_{i,:,:}-\mathcal{A}_{i,:,:}*\mathcal{X}^{(k)}\|_{F}^2}{\|\mathcal{A}_{i,:,:}\|_{F}^2}$\\[-0.2em]
+% % \quad $\displaystyle J_k=\Big\{i\in[N_1]:\|\mathcal{B}_{i,:,:}-\mathcal{Z}^{(k+1)}_{i,:,:}-\mathcal{A}_{i,:,:}*\mathcal{X}^{(k)}\|_{F}^2\ge
+% % \varepsilon_k^{x}\|\mathcal{A}_{i,:,:}\|_{F}^2\Big\}$\\[-0.2em]
+% \quad $\displaystyle \mathcal{X}^{(k+1)}=\mathcal{X}^{(k)}+(\mathcal{A}_{J_k,:,:})^\dagger*
+% \Big(\mathcal{B}_{J_k,:,:}-\mathcal{Z}^{(k+1)}_{J_k,:,:}-\mathcal{A}_{J_k,:,:}*\mathcal{X}^{(k)}\Big)$\\
+% {\bf end}\\
+% \bottomrule
+% \end{tabular*}
+% \end{center}
+% \end{frame}
+
+% \begin{frame}{}
+% \begin{itemize}
+%     \item We introduce the randomize in the TGDBEK  to obtain TRGDBEK.
+%     \item In fact, TRGDBEK keeps the same update schema and the greedy ingredident, which it restricts only on the columns to force a faster convergence to the kernel.
+%     \item What changes now is: it samples randomly a block of row slices of size $\vert U_k|$ provided that it is not more than the  $N_1$.
+%     \item This allows to dynamically selects blocks of slicces, without assuming any prior partition of the rows like does TREGBK  in \cite{huang2024tensor}.
+%     \item The random variant is well designed for large overdetermined inconsistent systems. The same idea can also be applied to Underdetermined systems.
+% \end{itemize}
+% \end{frame}
+
+% -----------------------------------------------------------
+%  Numerical examples
+% -----------------------------------------------------------
+\section{Numerical experiments}
+\begin{frame}{Numerical experiments}
+For the equation \eqref{eq:eq-1}, the tensor $\fm A$ is randomly generated using PyTorch, and the right-hand side $\fm B$ is set to be $\fm B= \fm A * \fm X_\ast + \fm R + \epsilon$, where $\fm X_\ast$ is the least-square solution of \eqref{eq:eq-1}, $\fm R\in \text{R}(\fm A^\top)$ and $\epsilon$ a noise term. The initial guess is given $\x{0} = \fm O$ and $\fm Z^{(0)}=\fm B$. All the  computations stop when the relative error ($err_k$) at the $k-$th iteration satisfies $err_k < 10^{-6}$ or when $IT$ exceeds $20000$ steps. The relative error of the solution is represented by the following
+\begin{align*}
+    err_k = \frac{\Vert \x{k}-\fm X_\ast \Vert_F^2}{\Vert \fm X_\ast \Vert_F^2}
+\end{align*}
+where $\fm X_\ast = \fm A^\dagger * \fm B$ is generated using PyTorch.
+\end{frame}
+
+\begin{frame}{}
+\begin{itemize}
+    \item  For further details, see the \href{https://drive.google.com/drive/folders/1lqGFVjWSrHsWIBxzUHLqVJsgBIZwPr2d?usp=sharing}{the notebooks}.
+\end{itemize}
+    
+\end{frame}
+
+
+
+% \section{References}
+% \begin{frame}{References}
+% \scriptsize 
+% \bibliographystyle{plain}
+% \bibliography{slides}
+% \end{frame}
+
+\section{References}
+\begin{frame}{References}
+    \tiny
+    \bibliographystyle{plain}
+    \bibliography{slides-references}
+\end{frame}
+
+%====================================================
+\end{document}
+%====================================================

@@ -1,0 +1,214 @@
+%====================================================
+% GBREK – LaTeX Beamer Template
+%====================================================
+\documentclass[aspectratio=169]{beamer} 
+
+%-------------------------
+% GENERAL PACKAGES
+%-------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}          % nicer font
+\usepackage{amsmath, amsfonts, amssymb}
+\usepackage{bm}               % bold math
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{subcaption}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{subcaption} % recommended
+% or: \usepackage{subfig}
+
+
+% Optional: algorithm environment
+\usepackage[ruled,vlined]{algorithm2e}
+\usepackage{algorithmic}
+\usepackage{algorithm}
+
+% \newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+% \newtheorem{corollary}[theorem]{Corollary}
+% \newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+% \newtheorem{definition}[theorem]{Definition}
+% \newtheorem{lemma}[theorem]{Lemma}
+
+
+% --- calligraphic tensors ---
+\newcommand{\mcalA}{\mathcal{A}}
+\newcommand{\mcalB}{\fm B}
+\newcommand{\mcalX}{\mathcal{X}}
+\newcommand{\mcalZ}{\mathcal{Z}}
+\newcommand{\mcalR}{\mathcal{R}}
+\newcommand{\mcalO}{\mathcal{O}} % zero tensor (use \mcalO)
+
+% --- sets / operators ---
+\newcommand{\Null}{\mathrm{Null}}
+\newcommand{\ran}{\mathrm{range}}
+
+
+
+
+ 
+\def\l{\left} 
+\def\r{\right} 
+\def\mbf{\mathbf}
+
+\def\rmf{{\rm F}}
+
+\def\wh{\widehat}
+\def\wt{\widetilde}
+
+\def\bcirc{{\rm bcirc}}
+\def\unfold{{\rm unfold}}
+\def\fold{{\rm fold}} 
+%\def\dia{{\rm diag}}
+\def\rank{{\rm rank}} 
+\def\ran{{\rm range}} 
+\def\nul{{\rm null}}
+\def\sgn{{\rm sgn}} 
+
+
+\def\mcala{\mathcal A}
+\def\mcalb{\mathcal B}
+\def\mcalc{\mathcal C}
+\def\mcale{\mathcal E}
+%\def\mcalg{\mathcal G}
+\def\mcali{\mathcal I}
+\def\mcalw{\mathcal W}
+\def\mcalx{\mathcal X}
+\def\mcaly{\mathcal Y}
+\def\mcalz{\mathcal Z}
+\DeclareMathOperator*{\argmin}{argmin}
+
+\def\mbbe{\mathbb E}
+\def\mbbr{\mathbb R}
+
+\def\dsp{\displaystyle} 
+\def\nn{\nonumber}
+
+\newcommand{\beq}{\begin{equation}}\newcommand{\eeq}{\end{equation}}
+\newcommand{\bit}{\begin{itemize}}\newcommand{\eit}{\end{itemize}}
+\newcommand{\bem}{\begin{bmatrix}}\newcommand{\eem}{\end{bmatrix}}
+
+
+
+%-------------------------
+% THEME & COLORS
+%-------------------------
+% \usetheme{Madrid}             % clean built-in theme
+% \usecolortheme{dolphin}
+
+% % Custom GBREK color palette
+% \definecolor{GBREKBlue}{RGB}{0, 60, 130}   % main accent
+% \definecolor{GBREKGreen}{RGB}{0, 150, 110} % secondary accent
+% \definecolor{GBREKGray}{RGB}{245, 245, 245}
+
+% % Apply colors
+% \setbeamercolor{structure}{fg=GBREKBlue}
+% \setbeamercolor{title}{fg=white,bg=GBREKBlue}
+% \setbeamercolor{frametitle}{fg=white,bg=GBREKBlue}
+% \setbeamercolor{block title}{fg=white,bg=GBREKGreen}
+% \setbeamercolor{block body}{bg=GBREKGray}
+% \setbeamercolor{itemize item}{fg=GBREKBlue}
+% \setbeamercolor{itemize subitem}{fg=GBREKGreen}
+
+% % Remove navigation symbols
+% \setbeamertemplate{navigation symbols}{}
+
+% % Footline with short title + page number
+\setbeamertemplate{footline}{%
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=.8\paperwidth,ht=2.75ex,dp=1.25ex,left]{author in head/foot}%
+      \usebeamerfont{author in head/foot}\hspace*{1em}\insertshorttitle
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.2\paperwidth,ht=2.75ex,dp=1.25ex,right]{date in head/foot}%
+      \usebeamerfont{date in head/foot}\insertframenumber{} / \inserttotalframenumber\hspace*{1em}
+    \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+%-------------------------
+% CUSTOM MACROS
+%-------------------------
+% \newcommand{\R}{\mathbb{R}}
+\newcommand{\GBREK}{\text{GBREK}}
+
+
+
+% --------personal commands ------
+\def\fm#1{\mathcal{#1}}
+\def\m#1{\boldsymbol{#1}}
+\def\mb{\boldsymbol{\beta}}
+\def\b{\beta}
+\def\r{\mathbb{R}}
+\def\tvx{\Tilde{\vx}}
+\def\t#1{\Tilde{#1}}
+\def\pr{Pr}
+\def\EE{\mathbb{E}}
+\def\Ukcol{\mathcal{U}^c_k}
+\def\Ukrow{\mathcal{U}^r_k}
+\def \ajk{\m A_{:, J_{j_k}}}
+\def \aik{\m A_{I_{i_k}, :}}
+\def \ai#1{\m A_{I_{#1}, :}}
+\def \aj#1{\m A_{:,J_{#1}}}
+\def\bik{\m b_{I_{k}}}
+\def \bi#1{\m b_{I_{#1}}}
+\def\zik{\m z_{I_{k}}}
+\def\zi#1{\m z_{I_{#1}}}
+% \def \xk#1#2{\m #1_{:, }}
+
+
+% --------personal commands ------
+\def\fm#1{\mathcal{#1}}
+\def\m#1{\boldsymbol{#1}}
+\def\mb{\boldsymbol{\beta}}
+\def\b{\beta}
+\def\r{\mathbb{R}}
+\def\tvx{\Tilde{\vx}}
+\def\t#1{\Tilde{#1}}
+\def\pr{Pr}
+
+\def \a#1{\fm A_{:, #1, :}}
+\def \b#1{\fm B_{#1, :, :}}
+\def \ai#1{\fm A_{#1, :, :}}
+\def \z#1#2{\fm Z^{(#1)}_{#2, :, :}}
+\def \bp#1{\fm B^{\perp}_{#1, :, :}}
+\def \x#1{\fm X^{(#1)}}
+
+% Short title & author for footer
+\title[TGDBEK]{Proposal 2: Tensor greedy double extended Kaczmarz with t-product for solving large-scale inconsistent linear tensor systems}
+\author[Jeremie Mabiala]{Jeremie Mabiala}
+\institute[AIMS Senegal]{%
+AIMS Senegal
+}
+\date{Feb. 26, 206} % or conference date
+
+%====================================================
+\begin{document}
+%====================================================
+
+%-------------------------
+% TITLE SLIDE
+%-------------------------
+\begin{frame}
+  \titlepage
+\end{frame}
+
+%-------------------------
+% OUTLINE
+%-------------------------
+\begin{frame}{Outline}
+  \tableofcontents
+\end{frame}
+
+\section{Abstract}
+\begin{frame}{Abstract}
+Tensors are intensively used to represent images, videos, and any higher dimensional object. In image reconstruction, given a blurred and noisy images, the reconstruction of the image can be expressed as a tensor linear systems. In this note, we present a tensor greedy double extended Kaczmarz (TGDBEK) for solving large scale tensor linear systems. Unlike the block-based methods TREBK, TREGBK, TREABK encountered in the literature which more or less require a pred-defined partition of the tensor system, the TGDBEK \textbf{does not require any pre-defined partitions of the tensor systems}. It employs \textbf{the greedy principle on the tensor systems to dynamically construct a relatively small subset of rows and columns slices}. Then updates the iterates  using  a REK update style.  We provide the convergence guarantees of the proposed method. We have sown that the proposed method converges exponentially in expectation to the minimum-norm solutions. Numerical examples are conducted to asses the effectiveness of the proposed method.
+\end{frame}
+
+
+
+\end{document}

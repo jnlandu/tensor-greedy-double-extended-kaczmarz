@@ -1,0 +1,863 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+%\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+\geometry{a4paper} 
+%\geometry{landscape}                % Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+
+\usepackage{amsmath,amssymb}
+\usepackage{amsthm}
+\usepackage{hyperref}
+\usepackage{graphicx,epsfig,color}
+\usepackage{booktabs,bm,multirow}
+%\usepackage[notref,notcite]{showkeys}
+\usepackage{cases}
+% \usepackage[caption=false]{subfig}
+\usepackage{graphicx}
+\usepackage{subcaption}  % provides the subfigure environment
+
+
+\usepackage{subcaption}
+
+%\renewcommand{\theequation}{\arabic{section}.\arabic{equation}}
+%\renewcommand\thesection{\arabic {section}}
+
+\usepackage{amsmath}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue},
+  commentstyle=\color{gray},
+  stringstyle=\color{teal},
+  showstringspaces=false,
+  frame=single,
+  breaklines=true
+}
+
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsmath,amssymb}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{lemma}[theorem]{Lemma}
+
+
+%\headsep=12mm \headheight=5mm 
+\topmargin=-15mm \oddsidemargin=-1.5mm\evensidemargin=-5mm
+\textheight=248truemm \textwidth=160truemm
+
+
+% --- calligraphic tensors ---
+\newcommand{\mcalA}{\mathcal{A}}
+\newcommand{\mcalB}{\fm B}
+\newcommand{\mcalX}{\mathcal{X}}
+\newcommand{\mcalZ}{\mathcal{Z}}
+\newcommand{\mcalR}{\mathcal{R}}
+\newcommand{\mcalO}{\mathcal{O}} % zero tensor (use \mcalO)
+
+% --- sets / operators ---
+\newcommand{\Null}{\mathrm{Null}}
+\newcommand{\ran}{\mathrm{range}}
+
+% --- norms ---
+\newcommand{\rmf}{\mathrm{F}}
+
+
+
+\input{TGDBEK.sty}
+
+\title{
+Tensor greedy double block extended Kaczmarz method for solving inconsistent tensor linear systems under t-product.
+% Proposal 2: Tensor Greedy Double Block Extended Kaczmarz using t-product
+}
+\author{Jeremie Mabiala\thanks{African Institute of  Mathematical Sciences and African Master's of Machine Intelligence,Senegal, (jeremy@aimsammi.org).},%\quad  Yang Li\thanks{School of Mathematical Sciences, Xiamen University, Xiamen 361005, China ({yangli@stu.xmu.edu.cn}).},
+% \quad  Lionel Tondji \thanks{School of Mathematical Sciences, Xiamen University, Xiamen 361005, China ({sunxh@stu.xmu.edu.cn}).
+% }
+} 
+\date{}   
+
+%  Personal commands
+
+% --------personal commands ------
+\def\fm#1{\mathcal{#1}}
+\def\m#1{\boldsymbol{#1}}
+\def\mb{\boldsymbol{\beta}}
+\def\b{\beta}
+\def\r{\mathbb{R}}
+\def\tvx{\Tilde{\vx}}
+\def\t#1{\Tilde{#1}}
+\def\pr{Pr}
+
+\def \a#1{\fm A_{:, #1, :}}
+\def \b#1{\fm B_{#1, :, :}}
+\def \ai#1{\fm A_{#1, :, :}}
+\def \z#1#2{\fm Z^{(#1)}_{#2, :, :}}
+\def \bp#1{\fm B^{\perp}_{#1, :, :}}
+\def \x#1{\fm X^{(#1)}}
+
+\newcommand{\comment}[1]{}
+
+
+
+
+
+% Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+
+\begin{abstract} 
+% For solving large-scale inconsistent systems of linear equations of tensors under the t-product, we propose  (i) tensor greedy double  block extended Kaczmarz, and (ii) tensor greedy double  block averaged  extended Kaczmarz. We prove theoretically  that each method converges linearly in expectation to the least-squares minimum-norm solution of the tensor equation. Numerical experiments  conducted show that the  tensor greedy double block extended Kaczmarz and the tensor greedy double block averaged extended Kaczmarz  can be more effective  than  the tensor randomized extended Kaczmarz, the tensor randomized extended average block Kaczmarz and the tensor, and the tensor randomized extended greedy block Kaczmarz algorithm.
+
+The randomized Kaczmarz method is a widely adopted iterative method for solving  linear systems of equations. To solve large-scale inconsistent linear systems of tensor equations under the t-product, we propose a tensor greedy double block extended Kaczmarz (TGDBEK) method. We prove  theoretically the convergence guarantees and showed that the proposed method converges linearly to the minimum-norm least-square solution of the tensor system. Moreover, we assess the performance of the proposed method through several numerical experiments. Compared to existing methods, the TGDBEK does not require predefined partitions of the tensor system and reduces the running time for solving large inconsistent system and requires less iteration.
+
+\vspace{.5mm} 
+
+{\bf Keywords}. Tensor equations, randomized extended Kaczmarz, tensor greedy randomized Kaczmarz,  t-product.
+
+% {\bf AMS subject classifications}: 65F10, 68W20, 90C25, 15A69
+
+\end{abstract}
+%\begin{AMS} 65F10, 65F20
+%\end{AMS} 
+
+
+
+% \section{Introduction}
+% Third-order tensors provide a convenient and often unavoidable representation for multiway data such as color images, hyperspectral scenes, videos, and multi-contrast medical volumes. In many imaging and reconstruction tasks, the forward model is naturally expressed as a \emph{t-linear} operator acting on a tensor unknown through the t-product algebra. This operator viewpoint preserves much of the familiar matrix calculus (transpose, orthogonal projectors, pseudoinverse) while retaining the multiway structure that is lost under naive vectorization.
+
+% In this work we consider large-scale (possibly inconsistent) t-linear tensor systems of the form
+% \begin{equation}\label{eq:intro_tls}
+% \mathcal{A} * \mathcal{X} \approx \mathcal{B}, 
+% \qquad
+% \mathcal{A}\in\mathbb{R}^{N_1\times N_2\times N_3},\;
+% \mathcal{B}\in\mathbb{R}^{N_1\times K\times N_3},\;
+% \mathcal{X}\in\mathbb{R}^{N_2\times K\times N_3},
+% \end{equation}
+% where $*$ denotes the t-product. In practice, inconsistency is the rule rather than the exception: noise, modeling error, discretization, and undersampling all perturb the data, and the most meaningful target is the minimum-norm least-squares solution in the t-product sense.
+
+% For matrix problems, Kaczmarz-type row-action methods remain attractive for large and sparse operators because each iteration touches only a small portion of the system. Randomized Kaczmarz enjoys linear convergence in expectation for consistent systems, and the randomized \emph{extended} Kaczmarz framework addresses inconsistency by augmenting the iteration with a secondary correction that drives the residual toward $\ker(A^\top)$, leading to convergence to the least-squares solution. These ideas have been successfully accelerated using block projections (randomized block Kaczmarz) and greedy selection rules that prioritize informative constraints.
+
+% The tensor counterparts of these methods have recently begun to mature. Several works extend Kaczmarz, extended Kaczmarz, and block/average-block variants to the t-product setting, motivated in particular by imaging problems where operators are structured and data come in multiple right-hand sides (or multiple frontal slices). A recurring practical issue is that block methods typically require \emph{predefined partitions} of the row/column index sets. Good partitions can accelerate convergence; poor partitions can slow it down or make performance unpredictable. In many inverse problems, the set of informative constraints changes during the iteration, and fixing the blocks a priori can become a bottleneck.
+
+% \paragraph{Proposed approach.}
+% We introduce a \emph{Tensor Greedy Double Block Extended Kaczmarz} method (TGDBEK) for solving \eqref{eq:intro_tls}. TGDBEK is designed around two principles:
+% \begin{enumerate}
+% \item \textbf{Extended correction for inconsistency:} an auxiliary tensor $\mathcal{Z}$ tracks the component of $\mathcal{B}$ that lies outside the range of $\mathcal{A}$, so that the $x$-update is applied to a progressively ``cleaned'' right-hand side.
+% \item \textbf{Double greedy adaptivity without fixed partitions:} at each iteration, TGDBEK forms small active sets of column slices and row slices by greedy thresholding of simple, normalized scores computed from current residual information. This removes the need for user-chosen partitions and allows the algorithm to focus computation where it is most productive.
+% \end{enumerate}
+% The result is a partition-free, inconsistency-robust method that remains memory-light and naturally compatible with large-scale scenarios, including sparse benchmark operators derived from SuiteSparse matrices reshaped into tensor form.
+
+% \paragraph{Contributions.}
+% The contributions of this paper are:
+% \begin{itemize}
+% \item We propose TGDBEK, a greedy \emph{double} extended Kaczmarz scheme in the t-product setting, and present a clear tensor-level description that mirrors the structure of the matrix REK family.
+% \item We establish linear convergence in expectation to the minimum-norm least-squares solution under standard assumptions, using projector geometry and t-linear algebra identities.
+% \item We demonstrate performance on imaging-motivated problems (blur/noise) and on sparse benchmark operators obtained from SuiteSparse matrices, and we compare against established tensor Kaczmarz baselines (e.g., TREK/TREBK/TREGBK-type methods).
+% \end{itemize}
+
+% \section{Related Work}
+% \subsection{Kaczmarz and extended Kaczmarz for least-squares}
+% The classical Kaczmarz method is a projection algorithm that enforces one (or a small set of) equation(s) per iteration. Randomized Kaczmarz selects rows with probabilities proportional to row norms and achieves linear convergence in expectation for consistent systems. To handle inconsistency, the randomized extended Kaczmarz (REK) mechanism introduces an auxiliary update that gradually removes the component of the right-hand side orthogonal to the range space, thereby converging to the least-squares solution. These results form the conceptual basis for the tensor extensions considered here.
+
+% \subsection{Block sampling and greedy acceleration}
+% Block Kaczmarz methods replace single-row projections with projections onto subspaces defined by blocks of rows, which can reduce iteration counts when block subproblems are solved efficiently. Theoretical analyses typically rely on assumptions about the quality of the block partition (e.g., pavings) and show linear convergence in expectation. Greedy variants aim to accelerate convergence by selecting constraints with large residual correlation or large normalized error contributions. In practice, greedy selection can be particularly effective on ill-conditioned or highly inhomogeneous problems, but it can also interact with sparsity and nonuniform row/column norms in ways that lead to oscillatory error traces.
+
+% \subsection{t-product tensor algebra and tensor Kaczmarz methods}
+% The t-product framework interprets a third-order tensor as a linear operator acting on matrices via circular convolution along the third mode, enabling matrix-like constructions (transpose, orthogonal projectors, pseudoinverse) in a tensor setting. This viewpoint has motivated tensor analogues of Kaczmarz-type solvers for t-linear systems, including extended and block/average-block variants aimed at inconsistent problems. Recent work in this direction studies randomized and block strategies under the t-product and reports promising results in imaging-oriented applications.
+
+% \subsection{Sparse benchmark operators and SuiteSparse}
+% Large sparse operators arising from PDE discretizations, networks, structural models, and transport problems are standard testbeds for iterative solvers. The SuiteSparse (University of Florida) Matrix Collection is widely used for such benchmarking. In the tensor setting, one can reshape a sparse matrix (or build a sparse block-circulant operator) into a third-order tensor and evaluate t-product solvers under controlled noise and inconsistency. This setting is especially useful for understanding when adaptive selection rules help, and when they may need stabilization for extreme sparsity or strong norm imbalance across slices.
+
+\section{Introduction}
+In this work, we focus on solving the tensor inconsistent  linear system  of the form 
+\begin{align}
+\label{eq:eq1}
+\mathcal{A} * \mathcal{X} =  \mathcal{B},\;  \fm B = \overline{\fm B} + \varepsilon
+\end{align}
+where $\mathcal{A}\in\mathbb{R}^{N_1\times N_2\times N_3},\;
+\mathcal{B}\in\mathbb{R}^{N_1\times K\times N_3},\;
+\mathcal{X}\in\mathbb{R}^{N_2\times K\times N_3},$  are third-order tensors, $\varepsilon \in \r^{N_1\times N_2\times N_3}$ the contamination tensor,  and $*$ the t-product proposed by Kilmer and collaborators in  \cite{kilmer2011facto, kilmer2013thirdOrder}. The t-product \comment{for tensors} provides a matrix-like algebra for third-order tensors, including analogues of  concept such as inverse of a tensor, transpose, orthogonal projections, and  pseudo-inverse, etc. \cite{kilmer2011facto, kilmer2013thirdOrder}. Since its introduction in \cite{kilmer2011facto}, the t-product has been applied in several theoretical and practical applications. For example, the authors in \cite{newman2018} proposed a tensor neural network (t-NN) framework that offers an exciting new paradigm for designing neural networks with multidimensional (tensor) data. For more information about the application of the t-product, we  kindly refer the reader to  \cite{zhang2018, qi2021, wang2020, newman2018, miao2020gener} and to  references therein. \comment{for further detailed applications of the t-product }\comment{in various topics like Singular Value Decomposition, Image recognition, neural network.  The authors in \cite{newman2018} proposed a new paradigm for training neural network faster} The problem of the form \eqref{eq:eq1} arises in many applications such as color image recovery,  MRI images deblurring with multiple channels, where the tensor  $\fm X$ is the unknown clean tensor image to be found, $\fm A$, is a blur operator tensor, and $\fm B$ is the observed blurred and noisy data. When the noise is relatively higher, it becomes difficult to solve this problem  through direct methods. Moreover, this setting makes typically an inconsistent system  where the problem is a least-square problem and a natural targeted solution is the minimum-norm  solution $\fm A^\dagger * \fm X$. \comment{ in the t-product sense. }
+
+In the matrix framework where $\fm A$ is a matrix, $\fm X$ and $\fm B$ are vectors,  iterative methods like the randomized Kaczmarz (RK) method can be  used to solve  the linear system  eq.~\eqref{eq:eq1}.
+% $A x = b$. 
+% \cite{strohmer2009, needell2009randomized, needell2010randomized} can be applied to   to solve equation of the form \eqref{eq:eq-1}. 
+The RK method selects rows  at each iteration with probability proportional to their Euclidean norm square. It was proved that this row selection strategy  makes the RK to converge linearly in expectation  for consistent and overdetermined linear systems \cite{strohmer2009}.  To solve inconsistent linear systems, Zouzias and Freris \cite{zouzias2013rando} enhanced the randomized Kaczmarz by introducing an additional iterative dual variable and proposed  the randomized extended Kaczmarz (REK) which  converges linearly in expectation to  the minimum-norm least square solution $A^\dagger x$, where $A^\dagger $ is the Moore-Penrose pseudoinverse of the system matrix $A$. 
+% The innovation in the REK is to doubly apply the randomized Kaczmarz method to both rows and columns. In other words, for the REK method \cite{zouzias2013randomized}, the iteration consists of two parts as follows
+% \begin{align*}
+%     z^{k+1} & = z^{k} - \frac{A_{:, j}^\top z^k}{\Vert A_{:, j}\Vert_2^2}\\
+%     x^{k+1} & = x^k - \frac{A_{i, :}x^k - z^k_i}{\Vert A_{i, :}\Vert_2^2}
+% \end{align*}
+It is worth mentioning that the RK method can be slow or can reduce to the cyclic Kaczmarz method when the matrix  coefficients are scaled  in an efficient way. % by a diagonal matrix. 
+Two practical ideas emerged and were studied in order to speed up the randomized Kaczmarz method. The first modifies the  row sampling by introducing block sampling and results to block variants randomized Kaczmarz (and  other related averaging variants) \cite{necoara2019faste, du2020rando,tondji2023faster}. In other words, in order to sample a single row, block-based randomized Kaczmarz methods and their variants sample a bock of rows with probability proportional to their Frobenius norm square. The second observes that the rows or blocks can be selected in each iteration according to some greedy  criterion  where only rows or blocks with largest residuals are selected. This  results to greedy randomized Kaczmarz  variants studied in \cite{bai2018greed,bai2019greed,bai2021greed} and references therein . The greedy selection shrinks the rows or blocks candidates  list to project on and typically  can results in a fewer iterations and convergence decay. 
+
+
+% The Randomized extended Kaczmarz 
+% The  RK method or its block variants selects a row  or a block of rows at random and projects  onto its solution hyperplane, yielding a linear convergence rate in expectation \cite{tondji2023faster, needell2009randomized, needell2010randomized}. 
+% Several variants of the Randomized Kaczmarz method were proposed to both solve consistent and inconsistent linear systems \cite{zouzias2013randomized}
+
+% The randomized extended Kaczmarz (REK) \cite{zouzias2013randomized} was introduced to solve inconsistent linear systems. It introduces an auxiliary update variable that drives the residual toward $\ker A^T$ and was proved  to converge linearly in expectation to the a least-square solution. The row selection strategy of the RK or REK can results to uniform sampling of the rows  when the matrix entries are scaled in a convenient way and results to slow linear convergence. Two  practical accelerations strategies have been studied: block sampling \cite{necoara2019faster, needell2009randomized} ( and its averaging/ relaxation variants \cite{necoara2019faster, du2020randomized}) and greedy selecton rules \cite{bai2018greedy, niu2020greedy}. The block-based randomized kacmarz method samples block of rows instead of a single row and results in a faster convergence rate \cite{necoara2019faster, needell2009randomized}, wherease the greedy-based Kaczmarz variants constraints the selection of rows on those having larger residual residuals. This strategy  cuts down the required running time and oftern requires less iteration than the vanilla Kaczmarz.  These ideas have been recently  extended to the t-product framework \cite{TREK}
+
+These ideas have been recently brought to the t-product tensor setting. \comment{In fact}In their seminal work, Ma and Molitor \cite{molitor2022} proposed  the tensor randomized Kaczmarz (TRK) method , which extends the RK method in matrix form to solve tensor linear systems of equations under the t-product. It was shown that using the t-product linear algebra that the TRK method  is equivalent to the block randomized Kaczmarz method in the Fourier domain and hence it is superior compared to the  RK  method applied to vectorized tensor system. Subsequently, Chen and Qin\cite{chen2021} utilized the randomized Kaczmarz method to address tensor recovery problems and proposed the randomized regularized Kaczmarz method. Numerical experiments demonstrated that the Kaczmarz method performs well in various signal/image recovery and image striping tasks. For applications of the randomized Kaczmarz method in tensor recovery and completion problems, please refer to reference \cite{chen2021,wang2022, wang2023, lia2024, zhang2024}. The authors of \cite{ba02020TRB} introduced the tensor randomized block Kaczmarz (TRBK) method, which enhances accuracy beyond the TRK method. These methods are all proposed based on the assumption of equation consistency. Huang et al. \cite{huang2023TREK} proposed a tensor randomized extended block Kaczmarz method (TREBK) to solve inconsistent equation, which breaks the constraint of equation consistency and can obtain a high-precision solution. The TREK method requires computing a pseudoinverse at each iteration. Following that observation, recently,  Liyuan An and collaborators \cite{lian2024TREABK} proposed a pseudoinverse-free randomized extended block Kaczmarz that  leverage the averaging idea  we have seen in \cite{necoara2019faste, du2020rando}. Numerical experiments have shown that the TREABK method is relatively similar to the TREBK. 
+
+% It is worth noting that many 
+Many of these tensors block methods we have seen above \cite{lian2024TREABK, ba02020TRB} rely inherently on predefined partitions of  rows or columns of the tensor system, which can be problem-dependent and many interact unfavorably with heterogeneous sparsity patterns commons in practical problems.  In this paper, inspired by the \cite{su2025}, we apply the concept of the greedy randomized block  extended Kaczmarz method
+from matrices to tensor equations. Consequently,  we propose a tensor greedy double block extended Kaczmarz (TGDBEK) method, which dynamically builds active set for row and column slices at each iteration, avoiding fixed partitions and focusing  projection computation where the  the current residual is the largest. In addition, we establish the convergence guarantes of the TGDBEK. Finally, we also demonstrate practical effectiveness of the proposed method against the TREBK, TREGBK \cite{huang2023TREK} and TREABK \cite{su2025}. We also highlight its application on image deblurring problem and on sparse  tensor system constructed from  SuiteSparse matrices \cite{suiteSparse}.
+
+The remainder of the paper is organized  as follows.  Section \ref{sec:prelim} introduces some definitions and notations that will be used in the sequel. In  Section \ref{sec:tdgbek}, we describe the TGDBEK  algorithm and give the convergence guarantee.  Numerical examples and application are provided to discuss the effectiveness of the proposed method in Section \ref{sec:numexp}. Finally, some conclusions are drawn in section \ref{sec:concl}.
+
+   
+\section{Notations and preliminaries} \label{sec:prelim}
+In this section , we discuss about the notations and the properties of tensor using the t-product that are  used in the sequel.
+\subsection{Basic notation}
+Throughout the paper,  the calligraphic letters such $\fm A, \fm B$ are used  to denote tensors. For an integer $m\geq 1$, we denote $[m]:=\{1, \ldots, m \}$. For a three-order tensor $\fm A$  $\fm A_{ijk}$ denotes the $(i, j,k)^th$ element of $\fm A$. $\fm A_{i, :, :}$, $\fm A_{:, j, :}$ and $\fm A_{:, :, k}$ are used to denote the horizontal slices, the lateral slices, and the frontal slices of the tensor $\fm A$, respectively. The pseudo-inverse of $\fm A$ is denoted as $\fm A^\dagger$ and the minimum and the maximum non zero singular values of a matrix are denoted as $\sigma_{\min}(\cdot)$ and $\sigma_{\max}(\cdot)$, respectively.
+
+
+\subsection{Tensor preliminaries}
+In this part, we provide  a brief review of main  definitions and results related to tensor using the t-product that are used in the sequel.  We use the notations from \cite{kilmer2011facto, kilmer2013thirdOrder}.\\
+For a third-order tensor $\fm A\in \r^{N_1\times N_2\times N_3}$, let $\m A_i = \fm A_{:, :, i}$. We define the block circulant matrix  $\bcirc(\fm A)$  of $\fm A$ as ,
+$$
+    \bcirc(\mcala):=\bem\mbf A_1 &\mbf A_{N_3} & \cdots & \mbf A_2\\ \mbf A_2 & \mbf A_1 & \cdots &\mbf A_3\\ \vdots &\vdots & \ddots &\vdots\\ \mbf A_{N_3}& \mbf A_{N_3-1}& \cdots &\mbf A_1\eem\in\mbbr^{N_1N_3\times N_2N_3}.
+$$
+Moreover, we define the operations $\fold(\cdot)$  and its inverse unfold($\cdot$) as follows
+$$
+\unfold(\mcala):=\bem\mbf A_1\\ \mbf A_2\\ \vdots\\ \mbf A_{N_3}\eem\in\mbbr^{N_1N_3\times N_2},\qquad \fold\left(\bem\mbf A_1\\ \mbf A_2\\ \vdots\\ \mbf A_{N_3}\eem\right):=\mcala.
+$$ 
+
+\begin{definition}[t-product, \cite{kilmer2011facto, kilmer2013thirdOrder}]
+For $\mcala\in\mbbr^{N_1\times N_2\times N_3}$ and $\mcalb\in\mbbr^{N_2\times K\times N_3}$, the {\it t-product} between $\mcala$ and $\mcalb $ is  a $ N_1\times K\times N_3$ tensor  defined and denoted  $\mcala*\mcalb$ 
+$$
+\mcala*\mcalb:=\fold(\bcirc(\mcala)\unfold(\mcalb)).
+$$	
+\end{definition}
+
+\begin{definition}[\cite{kilmer2011facto, kilmer2013thirdOrder}]
+Let $\mcala \in \r^{N_1\times \times N_2 \times N_3}$ and $\mcalb \in \r^{N_2\times K\times N_3}$. Then the t-product between $\fm A $ and $\fm B$ satisfy the following properties
+\begin{enumerate}
+    \item The separability in the first dimension, that is 
+    \begin{align*}
+        \left( \fm A * \fm B\right)(i, :, :) = \fm A(i, :, :) * \fm B.
+    \end{align*}
+    \item  The component form decomposition on the second dimension
+    \begin{align}
+        \fm A * \fm B = \sum_{j=1}^{N_2} \fm A(:, j, :) * \fm B (j, :, :).
+    \end{align}
+\end{enumerate}
+\end{definition}
+
+\begin{definition}[identity tensor]
+ The identity tensor $\mcali\in\mbbr^{N\times N\times N_3}$ is the tensor whose first frontal slice is the $N\times N$ identity matrix, and whose other frontal slices are all zeros.	
+\end{definition}
+For $\mcala\in\mbbr^{N_1\times N_2\times N_3}$ and $\mcali\in\mbbr^{N_1\times N_1\times N_3}$, it holds that \beq\label{ii}\mcala_{i,:,:}=\mcali_{i,:,:}*\mcala.\eeq For $\mcala\in\mbbr^{N_1\times N_2\times N_3}$ and $\mcali\in\mbbr^{N_2\times N_2\times N_3}$, it holds that \beq\label{ij}\mcala_{:,j,:}=\mcala*\mcali_{:,j,:}.\eeq
+
+\begin{definition}[transpose]
+The transpose of $\mcala\in\mbbr^{N_1\times N_2\times N_3}$, denoted by $\mcala^\top$, is the $N_2\times N_1\times N_3$ tensor obtained by transposing each of the frontal slices and then reversing the order of transposed frontal slices $2$ through $N_3$.
+\end{definition} 
+For $\mcala\in\mbbr^{N_1\times N_2\times N_3}$, we have  \beq\label{ttop}\bcirc(\mcala^\top)=(\bcirc(\mcala))^\top.\eeq %and \beq\label{eqj}\mcala*\mcala^\top=\sum_{j=1}^{N_2}\mcala_{:,j,:}*(\mcala_{:,j,:})^\top.\eeq 
+   
+\begin{definition}[identity tensor]
+ The identity tensor $\mcali\in\mbbr^{N\times N\times N_3}$ is the tensor whose first frontal slice is the $N\times N$ identity matrix, and whose other frontal slices are all zeros.	
+\end{definition}
+
+\begin{definition}[inner product]
+The inner product between $\mcala$ and $\mcalb$ in $\mbbr^{N_1\times N_2\times N_3}$ is defined as $$\la\mcala,\mcalb\ra:=\sum_{i,j,k}\mcala_{ijk}\mcalb_{ijk}.$$ 
+\end{definition}
+
+For $\mcala\in\mbbr^{N_1\times N_2\times N_3}$, $\mcalb\in\mbbr^{N_2\times K\times N_3}$, and $\mcalc\in\mbbr^{N_1\times K\times N_3}$, it holds that \beq\label{tran}\la\mcala*\mcalb,\mcalc\ra=\la\mcalb,\mcala^\top*\mcalc\ra.\eeq
+
+We will intensively employ the Frobenius norm of tensors to measure the distance between tensors. We  provide the spectral norm, Frobenius norms under the t-product.
+\begin{definition}  For $\fm A \in \r^{N_1 \times N_2 \times N_3}$, its spectral norm and the Frobenius norm are defined as follows
+\begin{align}
+    \Vert \fm A \Vert_2 &  := \Vert \bcirc (\fm A ) \Vert_2\\
+    \Vert \fm A \Vert_F &:= \sqrt{\langle \fm A , \fm A \rangle} = \sqrt{\sum_{i,j,k}}\fm A(i,j,k)^2
+\end{align}
+\end{definition}
+\begin{lemma}
+    For $\fm A\in \r^{N_1\times N_2 \times N_3}$ and $\fm B\in \r^{N_1\times N_2 \times N_3}$, it holds that 
+    \begin{align}
+        \Vert \fm A * \fm B \Vert_F\leq \Vert \fm A \Vert_2 \Vert \fm B \Vert_F
+    \end{align}
+\end{lemma}
+\begin{definition} For $\fm A\in \r^{N_1\times N_2\times N_3}$, its pseudoinverse, denoted by $\fm A^\dagger$, is the $N_2\times N_1\times N_3$ tensor satisfying
+\begin{align}
+    \bcirc(\fm A^\dagger) = \bcirc(\fm A )^\dagger
+\end{align}
+\end{definition}
+C'est une bonne chose de faire ce theorie. C'est une bonne chose de faire ce theorie . C'est une bonne chose de faire ce theorie.
+C'est une bonne chose de faire ce theorie . C'est une bonne chose de faire ce theorie
+C'est une bonne chose de faire ce theorie. C'est une bonne chose de faire ce theorie . C'est une bonne chose de faire ce theorie
+\begin{lemma}\label{lem:lem-10}
+Vraimment For $\fm A\in \r^{N_1\times N_2\times N_3}$ and  $\fm B\in \r^{N_2\times K\times N_3}$, the following holds
+\begin{align}
+\fm A^\top * \fm A * \fm A^\dagger * \fm B= \fm A^\top * \fm B
+\end{align}
+\end{lemma}
+\begin{definition}[\cite{an2024randomized}] For $\fm A\in \r^{N_1\times N_2\times N_3}$, the range  and the null of of $\fm A$ are defined as 
+\begin{align*}
+    \text{range}(\fm A ) &:= \left\{\fm A * \fm Y\; :\; \fm Y\in \r^{N_2\times K\times N_3} \right\}\\
+    \text{null}(\fm A) &:= \left\{ \fm X \in \r^{N_2\times K \times N_3 }\;:\; \fm A * \fm X = 0    \right\}
+\end{align*}
+\end{definition}
+
+\begin{lemma}\label{lem:lem-12}
+For $\fm A\in \r^{N_1\times N_2\times N_3}$ and $\fm X\in $ range($\fm A$),  the following holds 
+\begin{align}
+    \Vert \fm A^\top * \fm X \Vert_F^2 &  \geq \sigma_{\min}^2(\bcirc(\fm A))\Vert \fm X \Vert_F^2
+\end{align}
+\end{lemma}
+
+% \section{Proposed methods}
+\section{The tensor greedy double block extended Kaczmarz algorithm}\label{sec:tdgbek}
+
+Note that the range($\fm A $) and null($\fm A$) are orthogonal spaces to each other. For the the system  \eqref{eq:eq1}, $\fm B \notin$ range($\fm A $). Therefore, there must exist $\fm Z \in $null($\fm A$) such that $\fm B= (\fm B - \fm Z )  + \fm Z $, where $\fm B- \fm Z \in $ range($\fm A$). Solving the system \eqref{eq:eq1}  amounts to solving separately $\fm A^\top * \fm Z = \fm O$ and $\fm A* \fm X = \fm B - \fm Z$. Following the REK method \cite{zouzias2013rando}, it suffices to doubly apply randomized Kaczmarz Kaczmarz method to both equations. The following algorithm solves the equation eq. ~\eqref{eq:eq1}.
+
+% According to the sum decomposition, $\fm A^\top * \fm Z =\fm O$ can be written as a
+
+
+\begin{center}
+% \label{alg:alg-1}
+\begin{tabular*}{160mm}{l}
+\toprule {\bf Algorithm 1:} Tensor Greedy Double Block Extended Kaczmarz (TGDBEK)\\
+\hline \noalign{\smallskip}
+\quad {\bf Input}: $\mathcal{A}\in\mathbb{R}^{N_1\times N_2\times N_3}$, $\fm B\in\mathbb{R}^{N_1\times K\times N_3}$, iterations $\ell$, parameter $\eta\in(0,1]$.\\
+\noalign{\smallskip}
+\quad {\bf Initialize}: $\mathcal{X}^{(0)}=\mathcal{O}$ and $\mathcal{Z}^{(0)}=\fm B$.\\
+\noalign{\smallskip}
+\quad {\bf for} $k=0,1,\ldots,\ell-1$ {\bf do}\\
+\noalign{\smallskip}
+% \quad \qquad {\it (Z-step: push $\mathcal{Z}$ toward $\mathrm{Null}(\mathcal{A}^\top)$)}\\ \noalign{\smallskip}
+\quad \qquad $\displaystyle \varepsilon_k^{z}=\eta\max_{1\le j\le N_2}\left\{\frac{\big\|(\mathcal{A}_{:,j,:})^\top * \mathcal{Z}^{(k)}\big\|_{\mathrm{F}}^2}{\big\|\mathcal{A}_{:,j,:}\big\|_{\mathrm{F}}^2}\right\}$\\ \noalign{\smallskip}
+\quad \qquad $\displaystyle U_k=\left\{\, j\in[N_2] : \big\|(\mathcal{A}_{:,j,:})^\top * \mathcal{Z}^{(k)}\big\|_{\mathrm{F}}^2 \ge \varepsilon_k^{z} \big\|\mathcal{A}_{:,j,:}\big\|_{\mathrm{F}}^2 \right\}$\\ \noalign{\smallskip}
+\quad \qquad Update $\displaystyle \mathcal{Z}^{(k+1)}=\mathcal{Z}^{(k)}-\mathcal{A}_{:,U_k,:}*(\mathcal{A}_{:,U_k,:})^\dagger*\mathcal{Z}^{(k)}$\\
+\noalign{\smallskip}
+\quad \qquad $\displaystyle \varepsilon_k^{x}=\eta\max_{1\le i\le N_1}\left\{\frac{\big\|\fm B_{i, :, :}-\mathcal{Z}^{(k+1)}_{i, :, :}-\mathcal{A}_{i, :, :}*\mathcal{X}^{(k)}\big\|_{\mathrm{F}}^2}{\big\|\mathcal{A}_{i,:,:}\big\|_{\mathrm{F}}^2}\right\}$\\ \noalign{\smallskip}
+\quad \qquad $\displaystyle J_k=\{\, i\in[N_1] : \big\|\fm B_{i, :, :}-\mathcal{Z}^{(k+1)}_{i, :, :}-\mathcal{A}_{i, :, :}*\mathcal{X}^{(k)}\big\|_{\mathrm{F}}^2\ge \varepsilon_k^{x}\,\Vert \ai{i} \Vert_F^2\}$\\ \noalign{\smallskip}
+\quad \qquad Update $\displaystyle 
+\mathcal{X}^{(k+1)}=\mathcal{X}^{(k)}+(\fm A (J_k, :, :))^\dagger*
+\Big(\fm B_{J_k,:,:}-\mathcal{Z}^{(k+1)}_{J_k,:,:}-\fm A_{J_k, :, :}*\mathcal{X}^{(k)}\Big)$\\
+\noalign{\smallskip}
+\quad {\bf end}\\
+\bottomrule
+\end{tabular*}
+\end{center}
+At each iteration, the TGDBEK method constructs the active sets $U_k$ and $J_K$ for both columns and rows slices, which it uses in place blocks to projects the current iterates onto. This makes the TGDBEK independent from any  predefined partitions of  the tensor system.
+
+\begin{theorem} Assume the system  \eqref{eq:eq1} is inconsistent and let $\fm B^\perp := \fm B - \fm A \fm A^\dagger \fm B$. The tensor sequence $\fm X^{(k)}$ generated  by TGDBEK algorithm  converges to the  tensor least-square solution $\fm X_\ast = \fm A^\dagger * \fm B$. Moreover, for $k\geq 1$, the following holds
+\begin{align}
+    \Vert \fm X ^{(k+1)} - \fm X_\ast \Vert_F^2 \leq \alpha^{k+1}\Vert \fm X_0 - \fm X_\ast \Vert_F^2 + \frac{\alpha^{k+1}-\beta^{k+1}}{\alpha - \beta}\Vert \fm B^\perp \Vert_F^2
+\end{align}
+where $ \alpha = 1 - \theta \frac{\sigma_{\min}^2(\bcirc(\fm A^\top))}{\sigma^2_{\max}(\bcirc(\fm A^\top ))}$, $\beta = 1- \frac{\sigma^2_{\max}(\fm A)}{\Vert \fm A \Vert^2_F - \Vert \fm A(\overline{U}) \Vert_F^2}$, $\gamma = \sigma^2_{\min}(\fm A^{\fm J}), \; \theta \in (0,1]$ and $\eta \in (0, 1]$.
+\end{theorem}
+\begin{proof}
+From Lemma \ref{lem:lem-10}, we obtain 
+\begin{align*}
+    \fm A^\top *\fm B^\perp  =\fm A^\top  *\fm B - \fm A^\top * \fm A * \fm A^\dagger * \fm B =\fm A ^\top * \fm B  - \fm A ^\top * \fm B = 0
+\end{align*}
+In particular, for any $U_k \subset [N_2]$   we get $\fm A_{:, U_k, :}^\top *\fm B^\perp = 0$.
+Now, using the fact $\fm A * \fm A^\dagger = \left(\fm A * \fm  A^\dagger \right)^\top = (\fm A^\dagger)^\top * \fm A ^\top = (\fm A^\top )^\dagger * \fm A^\top   $  and the $z$-update in Alg. \ref{alg:alg-1}, we can get
+\begin{align*}
+    \fm Z^{(k+1)} - \fm B^\perp  & = \left(\fm Z^{(k)} - \fm B^\perp\right) - \left(\fm A^\top_{:, {U_k}, :} \right)^\dagger* \fm A^\top_{:, U_k, :} *\left( \fm Z ^{(k)}-\fm B^\perp \right)\\
+    & = \left(\fm I_{:, U_k, :} - \left( \a{U_k}^\top\right) ^\dagger \a{U_k}^\top\right)*\left( \fm Z^{(k)}- \fm B^\perp \right).
+\end{align*}
+Since $\left( \a{U_k}^\top\right) ^\dagger \a{U_k}^\top$  is a $t-$ tensor projector,  the Pythagorean theorem helps to obtain
+\begin{align}
+    \Vert   \fm Z^{(k+1)} - \fm B^\perp  \Vert_F^2  = \Vert  \fm Z^{(k)} - \fm B^\perp  \Vert_F^2 - \Vert  \left(\fm A^\top_{:, {U_k}, :} \right)^\dagger* \fm A^\top_{:, U_k, :} *\left( \fm Z ^{(k)}-\fm B^\perp \right) \Vert_F^2. \label{eq:eq-1b}
+\end{align}
+Moreover, from the Lemma \ref{lem:lem-12}, we  note that 
+\begin{align}
+    \Vert \left(\a{U_k}^\top \right)^\dagger * \a{U_k}^\top *\left(\fm Z^{(k)}-\fm B^\perp \right) \Vert_F^2 & =  \Vert \left(\a{U_k}^\top \right)^\dagger * \a{U_k}^\top *\fm Z^{(k)}\Vert_F^2 \notag\\
+    & \geq \sigma_{\min}^2((\a{U_k}^\top) ^\dagger)\Vert \a{U_k}^\top * \fm Z^{(k)} \Vert_F^2 
+  \quad \text{(by Lemma \ref{lem:lem-12})} \notag\\
+    & = \sigma_{\min}^2(\bcirc(\a{U_k}^\top) ^\dagger) \sum_{j\in U_k} \Vert \a j ^\top * \fm Z^{(k)} \Vert_F^2 \notag\\
+    & \geq \sigma_{\min}^2(\bcirc(\a{U_k}^\top) ^\dagger) \epsilon^z_k \Vert \a{U_k} \Vert_F^2 \notag\\
+    & =  \frac{\Vert \a{U_k} \Vert_F^2}{\sigma_{\max}^2(\bcirc(\a{U_k}^\top))} \epsilon_k^z .\label{eq:eq-2}
+\end{align}
+Now,  by the help of Lemma \ref{lem:lem-10}, we observe that
+\begin{align*}
+    \a{U_{k-1}}^\top \fm Z^{(k)} & = \a{U_{k-1}}^\top \left( \fm Z^{(k-1)} - \a{U_{k-1}}*\a{U_{k-1}}^\dagger \fm Z^{k-1} \right)\\
+    & =  \a{U_{k-1}}^\top*\fm Z^{(k-1)} - \a{U_{k-1}}^\top *\a{U_{k-1}}\a{U_{k-1}}^\dagger* \fm Z^{k-1} = \fm O, 
+\end{align*}
+so that for all $k=0, 1, \ldots$, we can get
+\begin{align*}
+    \Vert \fm A^\top * \fm Z^{(k)}\Vert_F^2  & = \sum_{j \in U_k} \Vert \a j ^\top  * \fm Z^{(k)} \Vert_F^2 + \sum_{j\in U^c_{k-1}}\Vert \a j ^\top  * \fm Z^{(k)} \Vert_F^2 \\
+    &=  \sum_{j\in U^c_{k-1}}\Vert \a j ^\top  * \fm Z^{(k)} \Vert_F^2  =  \sum_{j\in U^c_{k-1}} \frac{ \Vert \a j ^\top  * \fm Z^{(k)} \Vert_F^2}{ \Vert \a j \Vert_F^2}\Vert \a j \Vert_F^2\\
+    & \leq \max_{j \in [N_2]}\left\{  \frac{ \Vert \a j ^\top  * \fm Z^{(k)} \Vert_F^2}{ \Vert \a j \Vert_F^2} \right\}\left(\Vert \fm A \Vert_F^2 - \Vert \a{U_k} \Vert_F^2 \right).
+\end{align*}
+Hence
+\begin{align}
+    \epsilon^z_k = \eta \max_{j \in [N_2]}\left\{  \frac{ \Vert \a j ^\top  * \fm Z^{(k)} \Vert_F^2}{ \Vert \a j \Vert_F^2} \right\} &\geq \eta \frac{ \Vert \fm A^\top \fm Z^{(k)}\Vert_F^2}{\Vert \fm A \Vert_F^2 - \Vert \a{U_k} \Vert_F^2} \notag\\
+    & \geq \eta\frac{ \sigma_{\min}^2(\bcirc(\fm A^\top)) \Vert \fm Z^{(k)}-\fm B^\perp \Vert_F^2}{\Vert \fm A \Vert_F^2 - \Vert \a{U_k} \Vert_F^2},  \label{eq:eq-3}
+\end{align}
+where in the last inequality we used $ \Vert \fm A^\top *  \fm Z^{(k)}\Vert_F^2 =  \Vert \fm A^\top * \left( \fm Z^{(k)} - \fm B^\perp \right)\Vert_F^2 \geq \sigma_{\min}^2(\bcirc(\fm A^\top)) \Vert \fm Z^{(k)}-\fm B^\perp \Vert_F^2 $.\\
+Substitute \eqref{eq:eq-3} in \eqref{eq:eq-2} we can obtain
+\begin{align}
+     \Vert \left(\a{U_k}^\top \right)^\dagger * \a{U_k}^\top *\left(\fm Z^{(k)}-\fm B^\perp \right) \Vert_F^2 & \geq \frac{\eta \Vert \a{U_k} \Vert_F^2}{\Vert \fm A \Vert_F^2 - \Vert \a{U_k} \Vert_F^2} \frac{\sigma_{\min}^2(\bcirc(\fm A^\top)) \Vert \fm Z^{(k)}-\fm B^\perp \Vert_F^2}{\sigma_{\max}^2(\bcirc(\a{U_k}^\top))}. \label{eq:eq-4}
+\end{align}
+Let $\Vert \a{\overline{U}} \Vert_F^2 := \max_k \{ \Vert \a{U_k}\Vert_F^2\}$ so that, combining \eqref{eq:eq-1b} and  \eqref{eq:eq-4} above, we can finally obtain the upper bound
+\begin{align}
+     \Vert   \fm Z^{(k+1)} - \fm B^\perp  \Vert_F^2  & \leq  \left( 1 - \frac{\eta \Vert \a{U_k} \Vert_F^2}{ \sigma_{\max}^2(\bcirc(\a{U_k}^\top)) } \frac{\sigma_{\min}^2(\bcirc(\fm A^\top))}{\Vert \fm A \Vert_F^2 - \Vert \a{\overline{U}} \Vert_F^2}   \right) \Vert  \fm Z^{(k)} - \fm B^\perp \Vert_F^2  \notag \\
+     & \leq \left( 1 - \eta  \frac{\sigma_{\min}^2(\bcirc(\fm A^\top))}{\Vert \fm A \Vert_F^2 - \Vert \a{\overline{U}} \Vert_F^2}   \right) \Vert  \fm Z^{(k)} - \fm B^\perp \Vert_F^2 .
+\end{align}
+where  in the last inequality we used the fact that $\frac{\Vert \a{U_k}\Vert_F^2 }{\sigma_{\max}^2(\bcirc(\a{U_k}))}\geq 1$. The fact that  we can decompose $\b{J_k} = \ai{J_k}*\fm X^\ast + \bp{J_k} $, we can rewrite the the $x-$ update as,
+\begin{align*}
+   \fm X^{(k+1)} = \x k - \ai{J_k}^\dagger * \left( \a{J_k} *\left(\x k - \fm X^\ast \right) + \left(\z{k+1}{J_k} - \bp{J_k}  \right)\right)
+\end{align*}
+Subtracting $\fm X_\ast$  both sides  in the equality above, we obtain
+\begin{align}
+   \x {k+1} - \fm X_\ast  & =  \x{k} - \fm X_\ast  - \ai{J_k}^\dagger * \left( \a{J_k} *\left(\x k - \fm X^\ast \right) + \left(\z{k+1}{J_k} - \bp{J_k}  \right)\right) \notag\\
+   & =  \left( \fm I - \ai{J_k}^\dagger *  \a{J_k} \right) *\left(\x k - \fm X^\ast   \right) +  \ai{J_k}^\dagger* \left(\z{k+1}{J_k} - \bp{J_k}  \right)
+\end{align}
+Again $\a{J_k}^\dagger \a{J_k}$ is a $t-$ orthogonal projector  (slice-wise  orthogonal in the Fourier  domain), hence the two terms are orthogonal in the Frobenius norm. Therefore,  from the  Pythagorean theorem , we can obtain
+\begin{align}
+    \Vert \x{k+1} - \fm X_\ast \Vert_F^2 = \Vert \left( \fm I - \ai{J_k}^\dagger *  \a{J_k} \right) *\left(\x k - \fm X^\ast   \right) \Vert_F^2  +  \Vert  \ai{J_k}^\dagger* \left(\z{k+1}{J_k} - \bp{J_k}  \right) \Vert_F^2  \label{eq:eq-5}
+\end{align}
+Let  $\x{k}-\fm X_\ast = \left( \x{k} - \fm X_\ast \right)_{\text{R}((\a{J_k})^\top)} + \left(\x k - \fm X_\ast \right)_{\text{R}((\a{J_k})^\top)^\perp }$ and $\Vert \left( \x{k} - \fm X_\ast \right)_{\text{R}((\a{J_k})^\top)} \Vert_F^2  = \theta_k \Vert \x k - \fm X_\ast \Vert_F^2$. Then, using the Pythagorean theorem and the  Lemma (), we get :
+% \scriptsize
+\begin{align}
+\Vert \left( \fm I - \ai{J_k}^\dagger *  \a{J_k} \right) *\left(\x k - \fm X^\ast   \right) \Vert_F^2  & = \Vert \x k - \fm X_\ast \Vert_F^2 - \Vert  \ai{J_k}^\dagger *  \a{J_k}  *\left(\x k - \fm X^\ast   \right) \Vert_F^2  \notag\\
+& \leq  \Vert \x k - \fm X_\ast \Vert_F^2  \notag\\
+& -\sigma_{\min}^2(\a{J_k}^\dagger) \sigma_{\min}^2(\a{J_k}) \Vert\left( \x{k} - \fm X_\ast \right)_{\text{R}((\a{J_k})^\top)} \Vert_F^2 \notag\\
+& = \left( 1 - \theta_k \frac{\sigma_{\min}^2(\bcirc(\a{J_k}))}{\sigma^2_{\max}(\a{J_k})}\right) \Vert \x k - \fm X_\ast \Vert_F^2 \notag  \\
+& \leq \left( 1 - \theta \frac{\sigma_{\min}^2(\bcirc(\a{J}))}{\sigma^2_{\max}(\a{J})}\right) \Vert \x k - \fm X_\ast \Vert_F^2 \label{eq:eq-6}, 
+\end{align}
+where we denote $J = \{J_0, 1, \ldots, J_k \}$ and $\theta:= \min_{k} \{\theta_k \}$, and $\a{J}$ the stacked or the union block of tensors  $\a{J_k}$. For the second term,  we first note that $\Vert \fm A^\dagger * \fm X \Vert_F \leq \Vert \fm A ^\dagger \Vert_2^2 \Vert \fm X \Vert_F^2$. Then, we obtain
+\begin{align}
+  \Vert  \ai{J_k}^\dagger* \left(\z{k+1}{J_k} - \bp{J_k}  \right) \Vert_F^2  & \leq \sigma_{\max}^2((\a{J_k})^\dagger) \Vert  \z{k+1}{J_k} - \bp{J_k} \Vert_F^2 \notag\\
+  & = \frac{1}{\sigma_{\min}^2(\a{J_k})} \Vert  \z{k+1}{J_k} - \bp{J_k} \Vert_F^2.
+  \label{eq:eq-7}
+\end{align}
+It results from  \eqref{eq:eq-5}, \eqref{eq:eq-6}, and \eqref{eq:eq-7} that
+\begin{align*}
+ & \Vert \x{k+1} - \fm X_\ast \Vert_F^2 \\
+ &  \leq \left( 1 - \theta \frac{\sigma_{\min}^2(\bcirc(\a{J}))}{\sigma^2_{\max}(\a{J})}\right) \Vert \x k - \fm X_\ast \Vert_F^2 +  \frac{1}{\sigma_{\min}^2(\a{J_k})} \Vert  \z{k+1}{J_k} - \bp{J_k} \Vert_F^2\\
+ & \leq \left( 1 - \theta \frac{\sigma_{\min}^2(\bcirc(\a{J}))}{\sigma^2_{\max}(\a{J})}\right) \Vert \x k - \fm X_\ast \Vert_F^2 + \frac{1}{\sigma_{\min}^2(\a{J_k})} \left( 1 - \eta  \frac{\sigma_{\min}^2(\bcirc(\fm A^\top))}{\Vert \fm A \Vert_F^2 - \Vert \a{\overline{U}} \Vert_F^2}   \right) \Vert  \fm Z^{(k)} - \fm B^\perp \Vert_F^2 .
+\end{align*}
+To ease the notation, let $\alpha =  1 - \theta \frac{\sigma_{\min}^2(\bcirc(\a{J}))}{\sigma^2_{\max}(\a{J})}$, $\beta = 1 - \eta  \frac{\sigma_{\min}^2(\bcirc(\fm A^\top))}{\Vert \fm A \Vert_F^2 - \Vert \a{\overline{U}} \Vert_F^2}  $, \; $\gamma =\frac{1}{\sigma_{\min}^2(\a{J_k})}$. Then, induction over $k$ yields
+\begin{align*}
+    \Vert \x{k+1} - \fm X_\ast \Vert_F^2  & \leq \alpha  \Vert \x k - \fm X_\ast \Vert_F^2 + \frac{1}{\gamma}\beta \Vert \fm Z^{(k)} - \fm B^\perp \Vert_F^2\\
+    & \leq \alpha \left( \alpha  \Vert \x k - \fm X_\ast \Vert_F^2 + \frac{1}{\gamma}\beta \Vert \fm Z^{(k)} - \fm B^\perp \Vert_F^2 \right) + \beta^2 \frac{1}{\gamma} \Vert \fm Z^{(k-1)} - \fm B^\perp \Vert_F^2\\
+    &\vdots\\
+    & \leq \alpha^{k+1} \Vert \x 0 - \fm X_\ast \Vert_F^2  + \frac{1}{\gamma}\sum_{l=0}^k \alpha^{l} \beta^{k-l+1}  \Vert \fm Z^{(k-1)} - \fm B^\perp \Vert_F^2\\
+    &\leq \alpha^{k+1} \Vert \x 0 - \fm X_\ast \Vert_F^2 + \frac{\alpha^{k+1} -\beta^{k+1}}{\alpha - \beta} \frac{\beta}{\alpha}\Vert \fm B_{R(\fm A)}\Vert_F^2
+\end{align*}
+\end{proof}
+
+
+% \section{Count-Sketch Tensor Greedy Double Extended Kaczmarz}
+% In order to solve very larger overdetermined systems, we introduce Count-Sketch transform 
+
+% \begin{center}
+% \begin{tabular*}{160mm}{l}
+% \toprule {\bf Algorithm 1:} Tensor TGDBEK with Count-Sketch (TGDBEK-CS) for solving $\mathcal{A}*\mathcal{X}\approx \mathcal{B}$\\
+% \hline \noalign{\smallskip}
+% \quad {\bf Input}: $\mathcal{A}\in\mathbb{R}^{N_1\times N_2\times N_3}$, $\mathcal{B}\in\mathbb{R}^{N_1\times K\times N_3}$, iterations $\ell$, parameter $\eta\in(0,1]$,\\
+% \quad \hspace{11mm}sketch size $d\ll N_1$.\\ \noalign{\smallskip}
+% \quad {\bf Count-Sketch}: Construct $S\in\mathbb{R}^{d\times N_1}$ with one nonzero per column:\\
+% \qquad $S_{h(i),i}=s(i)\in\{\pm1\}$ for $i=1,\ldots,N_1$.\\ \noalign{\smallskip}
+% \quad {\bf Initialize}: $\mathcal{X}^{(0)}=\mathcal{O}$ and $\mathcal{Z}^{(0)}=\mathcal{B}$.\\
+% \noalign{\smallskip}
+% \quad {\bf Precompute}: $\widetilde{\mathcal{A}} = S\mathcal{A}$, $\widetilde{\mathcal{B}}=S\mathcal{B}$ \hfill (mode-1 sketch: $\widetilde{A}^{(t)}=SA^{(t)}$).\\
+% \noalign{\smallskip}
+% \quad {\bf for} $k=0,1,\ldots,\ell-1$ {\bf do}\\
+% \noalign{\smallskip}
+% \quad \qquad $\displaystyle \varepsilon_k^{z}=\eta\max_{1\le j\le N_2}\left\{\frac{\big\|(\tilde{\mathcal{A}}_{:,j,:})^\top * \mathcal{Z}^{(k)}\big\|_{\mathrm{F}}^2}{\big\|\tilde{\mathcal{A}}_{:,j,:}\big\|_{\mathrm{F}}^2} \right\}$\\ \noalign{\smallskip}
+% \quad \qquad $\displaystyle U_k=\{\, j\in[N_2] : \phi^{z}_j(k)\ge \varepsilon_k^{z}\,\}$\\ \noalign{\smallskip}
+% \quad \qquad Update $\displaystyle \mathcal{Z}^{(k+1)}=\mathcal{Z}^{(k)}-\mathcal{A}_{:,U_k,:}*\mathcal{Y}_k$\\
+% \noalign{\smallskip}
+% \quad \qquad $\displaystyle \varepsilon_k^{x}=\eta\max_{1\le i\le d} \left\{ \frac{\big\|\mathcal{B}-\mathcal{Z}^{(k+1)}-\tilde{\mathcal{A}}*\mathcal{X}^{(k)}\big\|_{\mathrm{F}}^2}{\big\|\mathcal{A}_{i,:,:}\big\|_{\mathrm{F}}^2}\right\}$\\
+% \noalign{\smallskip}
+% \quad \qquad $\displaystyle J_k=\{\, i\in[N_1] : \phi^{x}_i(k)\ge \varepsilon_k^{x}\,\}$\\ \noalign{\smallskip}
+% \quad \qquad Set $\displaystyle \mathcal{D}_k=\mathcal{B}_{J_k,:,:}-\mathcal{Z}^{(k+1)}_{J_k,:,:}-\mathcal{A}_{J_k,:,:}*\mathcal{X}^{(k)}$\\ \noalign{\smallskip}
+% \quad \qquad Sketch the block rows: $\widetilde{\mathcal{A}}_{J_k,:,:}=S\mathcal{A}_{J_k,:,:}$ and $\widetilde{\mathcal{D}}_k=S\mathcal{D}_k$\\ \noalign{\smallskip}
+% \quad \qquad Solve (sketched t-least squares) $\displaystyle \Delta\mathcal{X}_k=(\widetilde{\mathcal{A}}_{J_k,:,:})^\dagger*\widetilde{\mathcal{D}}_k$\\ \noalign{\smallskip}
+% \quad \qquad Update $\displaystyle \mathcal{X}^{(k+1)}=\mathcal{X}^{(k)}+\Delta\mathcal{X}_k$\\
+
+% \noalign{\smallskip}
+% \quad {\bf end}\\
+% \bottomrule
+% \end{tabular*}
+% \end{center}
+% \subsection{Tensor greedy double block average extended Kaczmarz} Instead of computing the t-pseudoinverse,  we can easily replace it  a convex weighted combination of projections of the current iterates on the block of hyperplanes formed by $\a{U_k}$ and $\a {J_k}$. In fact, at iterate $k$, after the active sets $U_k$ and $J_k$ have been created, we can update the citerates using the averaing update \cite{du2020randomized}:
+% \begin{align}
+%     \x{k+1} = 
+% \end{align}
+% We obtain
+
+
+% \begin{center}
+% \begin{tabular*}{160mm}{l}
+% \toprule {\bf Algorithm 1:} Tensor Greedy Double Block Averaged Extended Kaczmarz (TGDBAEK)\\
+% \hline \noalign{\smallskip}
+% \quad {\bf Input}: $\mathcal{A}\in\mathbb{R}^{N_1\times N_2\times N_3}$, $\fm B\in\mathbb{R}^{N_1\times K\times N_3}$, iterations $\ell$, parameter $\eta\in(0,1], \alpha \in (0, 2]$.\\
+% \noalign{\smallskip}
+% \quad {\bf Initialize}: $\mathcal{X}^{(0)}=\mathcal{O}$ and $\mathcal{Z}^{(0)}=\fm B$.\\
+% \noalign{\smallskip}
+% \quad {\bf for} $k=0,1,\ldots,\ell-1$ {\bf do}\\
+% \noalign{\smallskip}
+% \quad \qquad $\displaystyle \varepsilon_k^{z}=\eta\max_{1\le j\le N_2}\left\{\frac{\big\|(\mathcal{A}_{:,j,:})^\top * \mathcal{Z}^{(k)}\big\|_{\mathrm{F}}^2}{\big\|\mathcal{A}_{:,j,:}\big\|_{\mathrm{F}}^2}\right\}$\\ \noalign{\smallskip}
+% \quad \qquad $\displaystyle U_k=\left\{\, j\in[N_2] : \big\|(\mathcal{A}_{:,j,:})^\top * \mathcal{Z}^{(k)}\big\|_{\mathrm{F}}^2 \ge \varepsilon_k^{z} \big\|\mathcal{A}_{:,j,:}\big\|_{\mathrm{F}}^2 \right\}$\\ \noalign{\smallskip}
+% \quad \qquad Update $\displaystyle \mathcal{Z}^{(k+1)}=\mathcal{Z}^{(k)}-\frac{\alpha}{\Vert \mathbf{A}_{:, U_k, :}\Vert_F^2}\mathcal{A}_{:,U_k,:}* \mathcal{A}_{:, U_k, :}^\top*\mathcal{Z}^{(k)}$\\
+% \noalign{\smallskip}
+% \quad \qquad $\displaystyle \varepsilon_k^{x}=\eta\max_{1\le i\le N_1}\left\{\frac{\big\|\fm B-\mathcal{Z}^{(k+1)}-\mathcal{A}*\mathcal{X}^{(k)}\big\|_{\mathrm{F}}^2}{\big\|\mathcal{A}_{i,:,:}\big\|_{\mathrm{F}}^2}\right\}$\\ \noalign{\smallskip}
+% \quad \qquad $\displaystyle J_k=\{\, i\in[N_1] : \big\|\fm B-\mathcal{Z}^{(k+1)}-\mathcal{A}*\mathcal{X}^{(k)}\big\|_{\mathrm{F}}^2\ge \varepsilon_k^{x}\,\Vert \ai{i} \Vert_F^2\}$\\ \noalign{\smallskip}
+% \quad \qquad Update $\displaystyle 
+% \mathcal{X}^{(k+1)}=\mathcal{X}^{(k)}+\frac{\alpha}{\Vert \mathcal{A}_{:, J_k, :}\Vert_F^2}\fm A_{J_k, :, :}*
+% \Big(\fm B_{J_k,:,:}-\mathcal{Z}^{(k+1)}_{J_k,:,:}-\fm A_{J_k, :, :}*\mathcal{X}^{(k)}\Big)$\\
+% \noalign{\smallskip}
+% \quad {\bf end}\\
+% \bottomrule
+% \end{tabular*}
+% \end{center}
+
+\section{Numerical experiments} \label{sec:numexp}
+In this section, we assess the  performance of  the TGDBEK method through numerical experiments to demonstrate its effectiveness compared with TREABK \cite{}, TREBK\cite{}, TREBK\cite{}, and TREGBK. We use  PyTorch \cite{ansel2025pytorch} to implement and run our esperiments. All the experiments were conducted in Python and PyTorch on  Google Colab and a Macbook m3 Apple chip.\\
+We measure the performance of the aforementioned methods using the number of iteration steps ("IT") and the running time (denoted as "CPU"). Here, IT and CPU represents the arithmetic mean of the number of iterations and running time required to  each algorithms to reach the prescribed tolerance $10^{-4}$, and these values are replicated $10$ times. \\
+
+For the equation \eqref{eq:eq1}, the tensor $\fm A$ is randomly generated using PyTorch, and the right-hand side $\fm B$ is set to be $\fm B= \fm A * \fm X_\ast + \fm \epsilon$, where $\fm X_\ast$ is the least-square solution of \eqref{eq:eq-1} and the noise term.  The initial guess is given $\x{0} = \fm O$ and $\fm Z^{(0)}=\fm B$. All the  computations stop when the relative error ($err_k$) at the $k-$th iteration satisfies $err_k < 10^{-5}$ or when $IT$ exceeds $2000$ steps. The relative error of the solution is represented by the following
+\begin{align*}
+    err_k = \frac{\Vert \x{k}-\fm X_\ast \Vert_F^2}{\Vert \fm X_\ast \Vert_F^2}
+\end{align*}
+where $\fm X_\ast = \fm A^\dagger * \fm B$ is generated using PyTorch. For the noise $\epsilon$, it is computing like in \cite{huang2024tensor} as follows
+\begin{align}
+    \epsilon = a  \zeta  \frac{\Vert \beta\Vert_F} {\Vert \zeta \Vert_F}
+\end{align}
+
+% \subsection{Dense and sparse}
+\begin{example}[\textbf{Dense }]
+We test the  the performance of TGDBEK, REK, TREBK, TREGBEK, and TREABK algorithms  dense tensor systems of the form \eqref{eq:eq-1}. We solve the  equation  with $\fm A \in \r^{200\times 50 \times 50 }$  and $\fm B \in \r^{200\times 50\times 50 }$, and the noise  $\epsilon$ given as . For the algorithms which require block pre partition, we set  $\tau = 10$ for both row and column slices, and the number of partition is set as the ceiling of the $m// \tau$  and $n//\tau$. Finally,  the TGDBEK we let $\eta = .5$, and for the others methods we take $\delta =.7$.
+\end{example}
+
+\begin{example}[\textbf{Sparse}] In this example, we test the performance TGDBEK, TREBK, TREGBK methods to solve tensor linear systems  of equations, where $\fm A$ is a sparse tensor. To construct the sparse tebsor $\fm A$, we
+In this example, we test the performance of the TGDBEK, TREK, RDBK (q, k), and REBK (q, k)
+algorithms on sparse matrices of varying sizes and types. The detailed results are presented in Tables 1–3. It is important to note that for the GDBEK algorithm, $\eta$ is set to 0.5, and the values of q and k are empirically
+chosen as suitable parameters. In Table 3, we set both the row block and column block sizes in the RDBK
+algorithm to 5. As shown in Tables 1–3, the GDBEK algorithm outperforms the REK, RDBK, and REBK
+algorithms in both iteration steps and computing time. This demonstrates the strong competitiveness of
+the GDBEK algorithm in solving large-scale sparse inconsistent linear systems.
+\end{example}
+
+\begin{example}[\textbf{Color image recovery }] In this example we present a color image restoration problem using the the TGDBEK, TREABK, TREBK, TREGBK, and TREK methods. We apply these method to restore a blurred and noisy colored image of "flower". The original image taken from  the internet has the size $480\times 512\times 3$, and was adjusted to the size of $200 \times 200\times 3$ in order to apply the methods.  The deblurring tensor $\fm A$ is obtained  as follow
+\begin{align*}
+t\in [200], \; z \in \mathbb{R}^{200}, \; z_{1:\text{band}} = \exp\!\left(-\frac{t_{1:\text{band}}^{2}}{2\sigma^{2}}\right),\; A =  \frac{1}{\sigma\sqrt{2\pi}}\,T(z),\text{and} \; \fm{A}_{:,:,i} = A(i,:)\,A,\; i=1,2,3 \label{eq:Aslices}
+\end{align*}
+where $T(z)$ denotes the Toeplitz matrix generated by the vector $z$,
+$\fm {A}\in\mathbb{R}^{N\times N\times p}$ is formed slice-by-slice, $\sigma$ is the variance of the Gaussian filter, and band is the band of the Toeplitz, both set to $3$ and $25$, respectively. The full code can found in the GitHub repository. 
+
+\begin{figure}[htbp]
+\centering
+\begin{subfigure}[t]{0.32\linewidth}
+  \centering
+  \includegraphics[width=\linewidth]{main-folder/tests/tests/ex3-origin-after-resh.png}
+  \caption{True image}
+  \label{fig:ex3-(a)}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.32\linewidth}
+  \centering
+  \includegraphics[width=\linewidth]{main-folder/tests/tests/ex3-blur.png}
+  \caption{Blurred + noisy}
+  \label{fig:ex3-(b)}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.32\linewidth}
+  \centering
+  \includegraphics[width=\linewidth]{main-folder/tests/tests/ex3-trek.png}
+  \caption{TREK}
+  \label{fig:ex3-(c)}
+\end{subfigure}
+\vspace{0.8em}
+\begin{subfigure}[t]{0.32\linewidth}
+  \centering
+  \includegraphics[width=\linewidth]{main-folder/tests/tests/ex3-trebk.png}
+  \caption{TREBK}
+  \label{fig:ex3-fig(d)}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.32\linewidth}
+  \centering
+  \includegraphics[width=\linewidth]{main-folder/tests/tests/ex3-tregbk.png}
+  \caption{TREGBK}
+  \label{fig:ex3-fig-(e)}
+\end{subfigure}\hfill
+\begin{subfigure}[t]{0.32\linewidth}
+  \centering
+  \includegraphics[width=\linewidth]{main-folder/tests/tests/ex3-tgdbek.png}
+  \caption{TGDBEK}
+  \label{fig:ex3-(f)}
+\end{subfigure}
+\vspace{0.8em}
+\begin{subfigure}[t]{0.98\linewidth}
+  \centering
+  \includegraphics[width=\linewidth]{main-folder/tests/tests/ex3-plot.png}
+  \caption{Plot of the RSE versus  IT for each method for the  colored "flower" image recovery by TREK, TREBK, TREGBK and TGDBEK, respectively. }
+  \label{fig:ex3-(g)}
+\end{subfigure}
+\caption{}
+\label{fig:ex3-summary}
+\end{figure}
+
+The noise level was chosen as $10^{-1}$, the blurred and noisy image was obtained as the tensor $\fm B = \fm A * \fm X_\ast + \epsilon$, as displayed in the fig \ref{fig:ex3-(b)}. For all the methods the maximum iteration steps  is set $800$. For the block-based methods TREBK and TREGBK, we use $10$ partitions for each generated sequentially following \cite{du2020randomized}. The final results are given in Table \ref{tab:ex3} and the RSE vs IT convergence plot is given in fig. \ref{fig:ex3-(g)}. We also assess the accuracy of the restoration  by  comparing the original and the recovered image's similarity with the "SSM" function from scikit-image, which is provided below each image in fig. \ref{fig:ex3-summary}.
+\begin{table}[ht]
+\centering
+\begin{tabular}{lrrr}
+\toprule
+Method & Time (s) & RSE & IT \\
+\midrule
+TREK   & 13.277 & 0.673 & 800 \\
+TREBK  & 11.906 & 0.019 & 800 \\
+TREGBK & 18.066 & 0.000 & 800 \\
+TGDBEK & 18.752 & 0.000 & 503 \\
+\bottomrule
+\end{tabular}
+\caption{Results for the color "flower" image restoration}
+\label{tab:ex3}
+\end{table}
+We can see that the TREGBK and TGDBEK achieve almost the same SSM and PSNR,  while TGDBEK requires less iterations to achieve the same results.
+\end{example}
+
+
+\begin{example}[Gray image recovery]
+\end{example}
+
+
+
+
+\section{Conclusion}\label{sec:concl}
+This work presents and extends the greedy double block extended Kaczmarz method from matrix to tensor  systems for solving large-scale linear systems of tensor equations under the t=product.  The convergence guarantee is given and  several numerical examples illustrate the effectiveness of the proposed method.
+ 
+
+% [2] M. E. Kilmer and C. D. Martin, “Factorization strategies for third-order tensors,” Linear Algebra and
+% its Applications, vol. 435, no. 3, pp. 641–658, 2011.
+% [3] M. E. Kilmer, K. Braman, N. Hao, and R. C. Hoover, “Third-order tensors as operators on matrices:
+% A theoretical and computational framework with applications in imaging,” SIAM Journal on Matrix
+% Analysis and Applications, vol. 34, no. 1, pp. 148–172, 2013.
+% [4] Z. Zhang and S. Aeron, “Exact tensor completion using t-svd,” IEEE Transactions on Signal Processing, vol. 65, no. 6, pp. 1511–1526, 2016.
+% [5] O. Semerci, N. Hao, M. E. Kilmer, and E. L. Miller, “Tensor-based formulation and nuclear norm regularization for multienergy computed tomography,” IEEE Transactions on Image Processing, vol. 23,
+no. 4, pp. 1678–1693, 2014.
+
+\section*{Acknowledgments}
+ % This work was supported by the National Natural Science Foundation of China (No.12171403 and No.11771364), the Natural Science Foundation of Fujian Province of China (No.2020J01030), and the Fundamental Research Funds for the Central Universities (No.20720210032).	
+
+{\small 
+%\bibliographystyle{plain}
+%\bibliography{RREKTR.bib}
+
+
+\begin{thebibliography}{10}
+% ------------ Introduction of T-product and its applications ---------
+\bibitem{kilmer2011facto}
+Misha~E. Kilmer and Carla~D. Martin.
+\newblock Factorization strategies for third-order tensors.
+\newblock {\em Linear Algebra Appl.}, 435(3):641--658, 2011.
+
+\bibitem{kilmer2013thirdOrder}
+M. Kilmer, K. Braman, N. Hao and R. Hoover.
+\newblock Third-order tensors as operators
+on matrices: A theoretical and computational framework with applications in
+imaging
+\newblock {\em SIAM Journal on Matrix Analysis and Applications}, 34 (2013), 148-172.
+
+
+\bibitem{zhang2018}
+Zhang, A.K. Saibaba, M.E. Kilmer and S. Aeron, 
+\newblock “A randomized tensor singular
+value decomposition based on the t-product”.
+\newblock {\em Numerical Linear Algebra with
+Applications } 25 (2018) e2179.
+
+\bibitem{wang2020}
+Wang, X.Z., Che, M.L., Wei, Y.M..
+\newblock Tensor neural network models for tensor singular value decompo-
+sitions. 
+\newblock {\em Comput. Optim. Appl.} 75, 753–777 (2020)
+
+\bibitem{qi2021}
+Qi, Liqun and Yu, Gaohang.
+\newblock T-singular values and t-sketching for third order tensors.
+\newblock {\em arXiv preprint arXiv:2103.00976, 2021.}
+
+
+\bibitem{newman2018}
+Newman, E., Horesh, L., Avron, H., Kilmer, M.
+\newblock Stable tensor neural networks for rapid deep learning.
+\newblock {\em arXiv:1811.06569v1} (2018)
+% ---------------- References for Greedy and block K ------
+
+\bibitem{bai2018greed}
+Zhong-Zhi Bai and Wen-Ting Wu.
+\newblock On greedy randomized {K}aczmarz method for solving large sparse
+  linear systems.
+\newblock {\em SIAM J. Sci. Comput.}, 40(1):A592--A606, 2018.
+\bibitem{bai2019greed}
+Zhong-Zhi Bai and Wen-Ting Wu.
+\newblock On greedy randomized coordinate descent methods for solving large
+  linear least-squares problems.
+\newblock {\em Numer. Linear Algebra Appl.}, 26(4):e2237, 15, 2019.
+
+\bibitem{bai2021greed}
+Zhong-Zhi Bai and Wen-Ting Wu.
+\newblock On {G}reedy {R}andomized {A}ugmented {K}aczmarz {M}ethod for
+  {S}olving {L}arge {S}parse {I}nconsistent {L}inear {S}ystems.
+\newblock {\em SIAM J. Sci. Comput.}, 43(6):A3892--A3911, 2021.
+
+\bibitem{su2025}
+Wen-Ning Sun and Mei Qin
+\newblock On greedy double block extended Kaczmarz algorithm for solving
+large inconsistent linear systems.
+\newblock {\em J. Math. Anal. Appl.} 546 (2025).
+
+
+\bibitem{du2020rando}
+Kui Du, Wu-Tao Si, and Xiao-Hui Sun.
+\newblock Randomized extended average block {K}aczmarz for solving least
+  squares.
+\newblock {\em SIAM J. Sci. Comput.}, 42(6):A3541--A3559, 2020.
+
+% \bibitem{gower2015rando}
+% Robert~M. Gower and Peter Richt\'{a}rik.
+% \newblock Randomized iterative methods for linear systems.
+% \newblock {\em SIAM J. Matrix Anal. Appl.}, 36(4):1660--1690, 2015.
+
+\bibitem{kaczmarz1937angen}
+Stefan Kaczmarz.
+\newblock Angen\"aherte aufl\"osung von systemen linearer gleichungen.
+\newblock {\em Bull. Intern. Acad. Polonaise Sci. Lett., Cl. Sci. Math. Nat.
+  A}, 35:355--357, 1937.
+
+\bibitem{kudu2021}
+Kui Du, Xiaohui Sun.
+\newblock{Randomized regularized extended Kaczmarz algorithms for tensor recovery}
+\newblock{arXiv.org} 16 December 2021.
+
+% -------------- references for TRK abd its variants -------
+\bibitem{molitor2022}
+Ma, A., Molitor, D.
+\newblock Randomized Kaczmarz for tensor linear systems. 
+\newblock {\em BIT} 62(1), 171–194 (2022)
+
+\bibitem{chen2021}
+Chen, X.M., Qin, J.
+\newblock Regularized Kaczmarz algorithms for tensor recovery.
+\newblock {\em SIAM J. Imaging Sci.} 14(4), 1439–1471 (2021)
+
+\bibitem{wang2022}
+Wang, X.Z., Che, M.L., Wei, Y.M.
+\newblock Randomized Kaczmarz methods for tensor complementarity problems. \newblock{ \em Comput. Optim. Appl.} 82(3), 595–615 (2022)
+
+\bibitem{wang2023} 
+Wang, X.Z., Che, M.L., Mo, C.X., Wei, Y.M.
+Solving the system of nonsingular tensor equations via
+randomized Kaczmarz-like method. 
+\newblock {\em J. Comput. Appl. Math.} 421 (2023)
+
+\bibitem{lia2024}
+Liao, Y.M., Li, W., Yang, D.
+\newblock The accelerated tensor Kaczmarz algorithm with adaptive parameters for solving tensor systems. 
+\newblock {\em Appl. Numer. Math.} 202, 100–119 (2024)
+
+\bibitem{zhang2024} 
+Zhang, X.Q., Guo, X.F., Pan, J.Y.
+\newblock A sampling greedy average regularized Kaczmarz method for tensor
+recovery. 
+\newblock {\em Numer. Linear Algebra}, 2560 (2024)
+
+\bibitem{ba02020TRB}
+Bao, W.D., Zhang, F.Y., Li, W.G., Wang, Q., Gao, Y.
+\newblock Randomized average Kaczmarz algorithm for
+tensor linear systems. 
+\newblock{\em MATHEMATICS-BASEL} 10(23), 4594 (2022)
+
+\bibitem{du2021reabk}
+Du, K., Sun, X.H.
+\newblock Randomized regularized extended Kaczmarz algorithms for tensor recovery. 
+\newblock {\em arXiv preprint arXiv:2112.08566 }(2021)
+
+\bibitem{lian2024TREABK}
+Liyuan An, Kun Liang1 Han, and Jiao1 Qilong Liu.
+\newblock Randomized extended average block Kaczmarz method
+for inconsistent tensor equations under t-product.
+\newblock {\em Numerical Algorithms} (2025) 100:1123–1144
+
+\bibitem{huang2023TREK} Huang, G.X., Zhong, S.Y.
+\newblock Tensor randomized extended Kaczmarz methods for large inconsistent
+tensor linear equations with t-product. 
+\newblock {\em Numer. Algorithms}, 1–24 (2023)
+
+
+\bibitem{ma2015conve}
+Anna Ma, Deanna Needell, and Aaditya Ramdas.
+\newblock Convergence properties of the randomized extended {G}auss--{S}eidel
+  and {K}aczmarz methods.
+\newblock {\em SIAM J. Matrix Anal. Appl.}, 36(4):1590--1604, 2015.
+
+\bibitem{miao2020gener}
+Yun Miao, Liqun Qi, and Yimin Wei.
+\newblock Generalized tensor function via the tensor singular value
+  decomposition based on the {T}-product.
+\newblock {\em Linear Algebra Appl.}, 590:258--303, 2020.
+
+
+
+% -------------------------- Randomized Kaczmarz references list -----
+
+\bibitem{necoara2019faste}
+Ion Necoara.
+\newblock Faster randomized block {K}aczmarz algorithms.
+\newblock {\em SIAM J. Matrix Anal. Appl.}, 40(4):1425--1452, 2019.
+
+\bibitem{needell2010rando}
+Deanna Needell.
+\newblock Randomized {K}aczmarz solver for noisy linear systems.
+\newblock {\em BIT}, 50(2):395--403, 2010.
+
+\bibitem{needell2014paved}
+Deanna Needell and Joel~A. Tropp.
+\newblock Paved with good intentions: analysis of a randomized block {K}aczmarz
+  method.
+\newblock {\em Linear Algebra Appl.}, 441:199--221, 2014.
+
+\bibitem{needell2015rando}
+Deanna Needell, Ran Zhao, and Anastasios Zouzias.
+\newblock Randomized block {K}aczmarz method with projection for solving least
+  squares.
+\newblock {\em Linear Algebra Appl.}, 484:322--343, 2015.
+
+
+\bibitem{strohmer2009}
+Thomas Strohmer and Roman Vershynin.
+\newblock A randomized {K}aczmarz algorithm with exponential convergence.
+\newblock {\em J. Fourier Anal. Appl.}, 15(2):262--278, 2009.
+
+\bibitem{zouzias2013rando}
+Anastasios Zouzias and Nikolaos~M. Freris.
+\newblock Randomized extended {K}aczmarz for solving least squares.
+\newblock {\em SIAM J. Matrix Anal. Appl.}, 34(2):773--793, 2013.
+
+\bibitem{lu2018tenso}
+Canyi Lu.
+\newblock {\em Tensor-Tensor Product Toolbox}.
+\newblock Carnegie Mellon University, June 2018.
+\newblock \url{https://github.com/canyilu/tproduct}.
+
+\bibitem{suiteSparse}
+Kolodziej, S. P., Aznaveh, M., Bullock, M., Davis, T. A., Henderson, M., Hu, Y., and Sandstrom, R. 
+\newblock  The SuiteSparse Matrix Collection Website Interface.
+\newblock {\em Journal of Open Source Software}, 2019, 4(33), 1244.
+
+\bibitem{ansel2025pytorch}
+Ansel, Jason and Yang, Edward and He, Horace and Gimelshein, Natalia and Jain, Animesh and Voznesensky, Michael and Bao, Bin and Bell, Peter and Berard, David and Burovski, Evgeni and Chauhan, Geeta and Chourdia, Anjali and Constable, Will and Desmaison, Alban and DeVito, Zachary and Ellison, Elias and Feng, Will and Gong, and others
+\newblock {PyTorch 2: Faster Machine Learning Through Dynamic Python Bytecode Transformation and Graph Compilation}
+\newblock {\em Proceedings of the 2025 ACM SIGPLAN Conference on Programming Language Design and Implementation}
+
+
+\end{thebibliography} 
+% }
+
+
+
+\end{document}  
