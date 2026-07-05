@@ -18,9 +18,9 @@ The randomized Kaczmarz method is a widely adopted iterative method for solving 
 **The (peer-reviewed) technical report detailing the convergence guarantees will be made available soon. Find [here](./preprint.pdf) the first version of the report that's being finished.**
 
 #### The TDGEK Algorithm
-<!-- [tgdbek_algorithm.jpg](./imgs/tgdbek_algorithm.jpg) -->
+<!-- [tgdbek_algorithm.jpg](./references/imgs/tgdbek_algorithm.jpg) -->
 <p align="center">
-  <img src="./imgs/tgdbek_algorithm.jpg" alt="tgdbek_algorithm.jpg" width="500">
+  <img src="./references/imgs/tgdbek_algorithm.jpg" alt="tgdbek_algorithm.jpg" width="500">
 </p>
 
 
@@ -43,7 +43,7 @@ Here are some results comapring the TGDEK method with other state-of-the-art met
 
 Convergence plot for the `Cities` matrix:  RSE vs IT
 <p align="center">
-  <img src="./imgs/cities_tgdbek.png" alt="cities_tgdbek.ppg" width="500">
+  <img src="./references/imgs/cities_tgdbek.png" alt="cities_tgdbek.ppg" width="500">
 </p>
 
 2. Matrix: `ash85`
@@ -65,7 +65,7 @@ Convergence plot for the `Cities` matrix:  RSE vs IT
 
 Convergence plot for the `Cities` matrix:  RSE vs IT
 <p align="center">
-  <img src="./imgs/ash85_tdgbek.png" alt="ash85_tdgbek.png" width="500">
+  <img src="./references/imgs/ash85_tdgbek.png" alt="ash85_tdgbek.png" width="500">
 </p>
 
 3. Matrix : `nos5`
@@ -84,7 +84,7 @@ Convergence plot for the `Cities` matrix:  RSE vs IT
 Here's the convergence plot displaying  RSE vs IT:
 
 <p align="center">
-  <img src="./imgs/nos5_tdgbek.png" alt="nos5_tdgbek.png" width="500">
+  <img src="./references/imgs/nos5_tdgbek.png" alt="nos5_tdgbek.png" width="500">
 </p>
 
 

@@ -1,0 +1,160 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{booktabs}
+\usepackage{amsmath,amssymb}
+\usepackage{caption}
+\usepackage{microtype}
+\captionsetup{font=small,labelfont=bf}
+\title{\textbf{Experiment Tables}\\
+\large Tensor Greedy Double Block Extended Kaczmarz (TGDBEK)\\
+\normalsize Proposed method marked $*$ / bold}
+\date{}
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+
+\section*{Example~4.1 — Dense overdetermined tensor systems}
+$\mathcal{A}\in\mathbb{R}^{500\times n\times 10}$, $\mathcal{B}\in\mathbb{R}^{500\times 10\times 10}$, noise $=10^{-3}$, max iter $=800$, $\eta=0.6$, $\tau=10$, 5 trials.
+
+\begin{table}[ht]
+\centering
+\caption{Number of iterations (IT) for dense overdetermined tensor systems $\mathcal{A}\in\mathbb{R}^{500\times n\times 10}$, averaged over 5 independent trials. Bold indicates the proposed TGDBEK method. ``---'' denotes no convergence within the iteration budget.}
+\label{tab:dense-it}
+\begin{tabular}{lrrrrrr}
+\toprule
+Method & $n=20$ & $n=30$ & $n=40$ & $n=50$ & $n=60$ & $n=80$ \\
+\midrule
+TREK & 542 & --- & --- & --- & --- & --- \\
+TREBK & 36 & 66 & 95 & 126 & 167 & 259 \\
+TREGBK & 36 & 62 & 89 & 117 & 148 & 217 \\
+\textbf{TGDBEK} & \textbf{18} & \textbf{30} & \textbf{28} & \textbf{36} & \textbf{33} & \textbf{48} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{CPU time (seconds) for dense overdetermined tensor systems, averaged over 5 independent trials.}
+\label{tab:dense-cpu}
+\begin{tabular}{lrrrrrr}
+\toprule
+Method & $n=20$ & $n=30$ & $n=40$ & $n=50$ & $n=60$ & $n=80$ \\
+\midrule
+TREK & 2.225 & 3.244 & 2.947 & 2.952 & 2.788 & 2.855 \\
+TREBK & 1.003 & 1.632 & 2.153 & 2.897 & 3.691 & 6.118 \\
+TREGBK & 1.051 & 1.678 & 2.368 & 3.162 & 3.916 & 6.451 \\
+\textbf{TGDBEK} & \textbf{0.859} & \textbf{1.303} & \textbf{1.285} & \textbf{1.708} & \textbf{1.732} & \textbf{3.100} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section*{Example~4.2 — Sparse tensor systems (SuiteSparse)}
+Tolerance $10^{-6}$, $\tau=10$, $\eta$ per matrix.
+
+\begin{table}[ht]
+\centering
+\caption{Results on sparse tensor systems from SuiteSparse. IT: iterations; CPU: seconds; RSE: relative squared error $\|\mathcal{X}^{(k)}-\mathcal{X}^*\|_F^2/\|\mathcal{X}^*\|_F^2$. ``---'' denotes no convergence. $*$ marks the proposed method.}
+\label{tab:sparse}
+\begin{tabular}{llrrr}
+\toprule
+Matrix & Method & IT & CPU (s) & RSE \\
+\midrule
+nos5 & TREK & 300 & 1.239 & $9.288\times 10^{-2}$ \\
+ & TREBK & 138 & 4.054 & $9.888\times 10^{-7}$ \\
+ & TREGBK & 106 & 3.399 & $9.559\times 10^{-7}$ \\
+ & $*$\textbf{TGDBEK} & \textbf{44} & \textbf{2.828} & \textbf{$9.659\times 10^{-7}$} \\
+\midrule
+ash85 & TREK & 300 & 1.173 & $1.386\times 10^{-1}$ \\
+ & TREBK & 171 & 2.544 & $9.463\times 10^{-7}$ \\
+ & TREGBK & 300 & 4.401 & $1.028\times 10^{-6}$ \\
+ & $*$\textbf{TGDBEK} & \textbf{128} & \textbf{2.964} & \textbf{$9.716\times 10^{-7}$} \\
+\midrule
+Cities & TREK & 6000 & 21.075 & $3.807\times 10^{-3}$ \\
+ & TREBK & 1916 & 15.799 & $9.815\times 10^{-7}$ \\
+ & TREGBK & 5740 & 46.848 & $9.881\times 10^{-7}$ \\
+ & $*$\textbf{TGDBEK} & \textbf{1107} & \textbf{15.355} & \textbf{$9.783\times 10^{-7}$} \\
+\midrule
+WorldCities & TREK & 6000 & 22.366 & \text{---} \\
+ & TREBK & 3 & 0.155 & $7.770\times 10^{-7}$ \\
+ & TREGBK & 228 & 5.413 & $8.757\times 10^{-7}$ \\
+ & $*$\textbf{TGDBEK} & \textbf{1} & \textbf{0.070} & \textbf{$5.527\times 10^{-7}$} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section*{Examples~4.3--4.5 — Image deblurring}
+Gaussian blur ($\sigma=4$), noise added, tolerance $10^{-5}$, $\eta=0.5$, $\tau=10$.
+
+\begin{table}[ht]
+\centering
+\caption{Color image deblurring (flower, $200\times 200\times 3$, noise $=10^{-2}$, max iter $=1000$).}
+\label{tab:flower}
+\begin{tabular}{lrrrrr}
+\toprule
+Method & IT & CPU (s) & RSE & PSNR (dB) & SSIM \\
+\midrule
+TREK & 1000 & 3.580 & $7.885\times 10^{-1}$ & 13.04 & 0.2654 \\
+TREBK & 1000 & 9.413 & $1.428\times 10^{-2}$ & 30.19 & 0.8405 \\
+TREGBK & 1000 & 16.637 & $1.172\times 10^{-3}$ & 30.32 & 0.8432 \\
+$*$\textbf{TGDBEK} & \textbf{480} & \textbf{14.441} & \textbf{$9.877\times 10^{-6}$} & \textbf{30.32} & \textbf{0.8432} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Color image deblurring (portrait, $200\times 200\times 3$, noise $=10^{-1}$, max iter $=3000$).}
+\label{tab:original}
+\begin{tabular}{lrrrrr}
+\toprule
+Method & IT & CPU (s) & RSE & PSNR (dB) & SSIM \\
+\midrule
+TREK & 3000 & 9.920 & $7.175\times 10^{-1}$ & 12.52 & 0.1786 \\
+TREBK & 2577 & 24.241 & $9.036\times 10^{-6}$ & 12.13 & 0.1582 \\
+TREGBK & 1714 & 24.862 & $9.785\times 10^{-6}$ & 12.13 & 0.1582 \\
+$*$\textbf{TGDBEK} & \textbf{541} & \textbf{17.832} & \textbf{$9.993\times 10^{-6}$} & \textbf{12.13} & \textbf{0.1582} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Gray MRI image deblurring (Shepp-Logan, $128\times 128\times 27$, noise $=10^{-3}$, max iter $=1000$).}
+\label{tab:shepp}
+\begin{tabular}{lrrrrr}
+\toprule
+Method & IT & CPU (s) & RSE & PSNR (dB) & SSIM \\
+\midrule
+TREK & 1000 & 4.536 & $7.161\times 10^{-1}$ & 17.75 & 0.5822 \\
+TREBK & 1000 & 60.832 & $5.407\times 10^{-4}$ & 58.02 & 0.9976 \\
+TREGBK & 1000 & 69.298 & $2.437\times 10^{-5}$ & 58.07 & 0.9976 \\
+$*$\textbf{TGDBEK} & \textbf{477} & \textbf{42.851} & \textbf{$9.878\times 10^{-6}$} & \textbf{58.07} & \textbf{0.9976} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section*{Example~4.6 — Effect of $\eta$ on TGDBEK}
+
+\begin{table}[ht]
+\centering
+\caption{Effect of the greedy threshold $\eta$ on TGDBEK. Dense system $\mathcal{A}\in\mathbb{R}^{500\times 20\times 10}$, noise $=10^{-3}$.}
+\label{tab:eta}
+\begin{tabular}{crr}
+\toprule
+$\eta$ & IT & CPU (s) \\
+\midrule
+$0.1$ & 1 & 0.065 \\
+$0.2$ & 1 & 0.032 \\
+$0.3$ & 1 & 0.032 \\
+$0.4$ & 1 & 0.043 \\
+$0.5$ & 6 & 0.655 \\
+$0.6$ & 18 & 0.966 \\
+$0.7$ & 37 & 1.457 \\
+$0.8$ & 57 & 1.760 \\
+$0.9$ & 88 & 2.353 \\
+$1.0$ & 362 & 7.962 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\end{document}
