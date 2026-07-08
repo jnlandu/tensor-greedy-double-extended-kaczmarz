@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Example 4.3 — Color image deblurring (flower.jpg).
 
-200×200×3, sigma=4, band=32, noise=1e-2, T=1000, eta=0.5
+200x200x3, sigma=4, band=32, noise=1e-2, T=1000, eta=0.5
 """
 import numpy as np
 import matplotlib.pyplot as plt
@@ -17,10 +17,10 @@ def main():
         print("  Skipping Example 4.3 (scikit-image / imageio not available)")
         return
 
-    print("\n" + "█"*65)
+    print("\n" + "*"*65)
     print("  EXAMPLE 4.3  Color image deblurring (flower.jpg)")
-    print("  200×200×3, σ=4, band=32, noise=1e-2, T=1000, η=0.5")
-    print("█"*65)
+    print("  200x200x3, sigma=4, band=32, noise=1e-2, T=1000, eta=0.5")
+    print("*"*65)
 
     from tensor_toolbox.tensorLinalg import t_product as tp, t_pinv_apply as tpa
 
@@ -43,7 +43,7 @@ def main():
     results, orig_np, blur_np = run_image_experiment(
         A, B, X_star, X_ls, T, ETA, DELTA, TAU, RCOND_TGDBEK)
 
-    print_image_table("TABLE 3  Color image deblurring (flower, 200×200×3)", results)
+    print_image_table("TABLE 3  Color image deblurring (flower, 200x200x3)", results)
     save_image_grid(results, orig_np, blur_np, "ex3", is_color=True)
 
     # Extra paper figures (named differently from the grid saves)

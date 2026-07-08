@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Example 4.6 — Effect of greedy threshold eta on TGDBEK.
 
-A ∈ R^{500×20×10}, noise=1e-2, T=2000, tol=1e-6, 20 trials
+A ∈ R^{500x20x10}, noise=1e-2, T=2000, tol=1e-6, 20 trials
 eta ∈ {0.1, 0.2, ..., 1.0}
 """
 import numpy as np
@@ -13,10 +13,10 @@ from utils import (device, dtype, SEED, OUTDIR,
 
 
 def main():
-    print("\n" + "█"*65)
+    print("\n" + "*"*65)
     print("  EXAMPLE 4.6  Effect of η on TGDBEK")
-    print("  A ∈ R^{500×20×10}, noise=1e-2, T=2000, tol=1e-6, 20 trials")
-    print("█"*65)
+    print("  A ∈ R^{500x20x10}, noise=1e-2, T=2000, tol=1e-6, 20 trials")
+    print("*"*65)
 
     from tensor_toolbox.tensorLinalg import t_product as tp, t_pinv_apply as tpa
 
