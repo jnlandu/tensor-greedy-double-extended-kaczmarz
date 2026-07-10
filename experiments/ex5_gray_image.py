@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Example 4.5 — Gray (MRI-like) image deblurring, Shepp-Logan 128×128×27.
+"""Example 4.5 — Gray (MRI-like) image deblurring, Shepp-Logan 128x128x27.
 
-128×128×27, sigma=4, band=64, noise=1e-3, T=1000, eta=0.5
+128x128x27, sigma=4, band=64, noise=1e-3, T=1000, eta=0.5
 """
 import numpy as np
 import matplotlib.pyplot as plt
@@ -16,10 +16,10 @@ def main():
         print("  Skipping Example 4.5 (scikit-image / imageio not available)")
         return
 
-    print("\n" + "█"*65)
+    print("\n" + "*"*65)
     print("  EXAMPLE 4.5  Gray MRI-like image deblurring (Shepp-Logan)")
-    print("  128×128×27, σ=4, band=64, noise=1e-3, T=1000, η=0.5")
-    print("█"*65)
+    print("  128x128x27, sigma=4, band=64, noise=1e-3, T=1000, eta=0.5")
+    print("*"*65)
 
     from tensor_toolbox.tensorLinalg import t_product as tp, t_pinv_apply as tpa
 
@@ -42,7 +42,7 @@ def main():
     results, orig_np, blur_np = run_image_experiment(
         A, B, X_star, X_ls, T, ETA, DELTA, TAU, RCOND_TGDBEK)
 
-    print_image_table("TABLE 5  Gray MRI image deblurring (128×128×27, noise=1e-3)", results)
+    print_image_table("TABLE 5  Gray MRI image deblurring (128x128x27, noise=1e-3)", results)
     save_image_grid(results, orig_np, blur_np, "gray",
                     is_color=False, central_slice=CENTRAL)
 
