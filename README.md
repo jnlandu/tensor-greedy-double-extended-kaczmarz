@@ -1,16 +1,16 @@
 # Tensor Greedy Double Block Extended Kaczmarz (TGDBEK) Method
 
-This repository contains the implementation of the Tensor Greedy Double Block Extended Kaczmarz (TGDBEK) method for solving large-scale linear tensor equations under the t-product, together with the code to reproduce all numerical experiments in the paper.
+This repository contains the implementation of the Tensor Greedy Double Block Extended Kaczmarz (TGDBEK) method for solving linear tensor equations under the t-product, together with the code to reproduce all numerical experiments.
 
-The TGDBEK method is an efficient deterministic extended Kaczmarz variant. It uses a greedy criterion to select the most "informative" hyperplanes to project onto at each iteration, leading to faster convergence than random selection methods.
+<!-- The TGDBEK method is an efficient deterministic extended Kaczmarz variant. It uses a greedy criterion to select the most "informative" hyperplanes to project onto at each iteration, leading to faster convergence than random selection methods.
 
 We benchmark TGDBEK against several state-of-the-art algorithms (TREK, TREBK, TREGBK) on synthetic tensors, sparse matrices from the [SuiteSparse Matrix Collection](https://sparse.tamu.edu/), and (color and grayscale) image deblurring tasks. Performance is measured by running time (CPU), iteration count (IT), and relative residual/error; for image reconstruction we additionally report SSIM (Structural Similarity Index Measure) and PSNR (Peak Signal-to-Noise Ratio).
 
-### Abstract
+### Abstract -->
 
-The randomized Kaczmarz method is a widely adopted iterative method for solving linear systems of equations. To solve large-scale inconsistent linear systems of tensor equations under the t-product, we propose a tensor greedy double block extended Kaczmarz (TGDBEK) method. We prove theoretically the convergence guarantees and show that the proposed method converges linearly to the minimum-norm least-squares solution of the tensor system. Moreover, we assess the performance of the proposed method through several numerical experiments. Compared to existing methods, TGDBEK does not require predefined partitions of the tensor system and reduces the running time for solving large inconsistent systems, while also requiring fewer iterations.
+<!-- The randomized Kaczmarz method is a widely adopted iterative method for solving linear systems of equations. To solve large-scale inconsistent linear systems of tensor equations under the t-product, we propose a tensor greedy double block extended Kaczmarz (TGDBEK) method. We prove theoretically the convergence guarantees and show that the proposed method converges linearly to the minimum-norm least-squares solution of the tensor system. Moreover, we assess the performance of the proposed method through several numerical experiments. Compared to existing methods, TGDBEK does not require predefined partitions of the tensor system and reduces the running time for solving large inconsistent systems, while also requiring fewer iterations. -->
 
-**The (peer-reviewed) technical report detailing the convergence guarantees will be made available soon. Find [here](./preprint.pdf) the first version of the report.**
+<!-- **The (peer-reviewed) technical report detailing the convergence guarantees will be made available soon. Find [here](./preprint.pdf) the first version of the report.** -->
 
 #### The TGDBEK Algorithm
 
@@ -52,8 +52,8 @@ pip install -r requirements.txt
 
 `requirements.txt` installs the standard scientific stack (PyTorch, NumPy, SciPy, Matplotlib, scikit-image, imageio, ssgetpy) plus two companion packages from GitHub:
 
-- [`tensor_toolbox`](https://github.com/jnlandu/tensor-tensor-toolbox-in-python) — a Python implementation of the t-product and related concepts, following the MATLAB [tensor-tensor product toolbox](https://github.com/canyilu/Tensor-tensor-product-toolbox);
-- [`trk_algorithms`](https://github.com/jnlandu/tensor-randomized-kaczmarz-algorithms) — the baseline tensor randomized Kaczmarz algorithms (TREK, TREBK, TREGBK).
+- [`tensor_toolbox`](https://github.com/jnlandu/tensor-tensor-toolbox-in-python) : a Python implementation of the t-product and related concepts, following the MATLAB [tensor-tensor product toolbox](https://github.com/canyilu/Tensor-tensor-product-toolbox);
+- [`trk_algorithms`](https://github.com/jnlandu/tensor-randomized-kaczmarz-algorithms): the baseline tensor randomized Kaczmarz algorithms (TREK, TREBK, TREGBK).
 
 ## Reproducing the experiments
 
