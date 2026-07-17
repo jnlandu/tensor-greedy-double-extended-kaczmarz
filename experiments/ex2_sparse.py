@@ -17,9 +17,9 @@ import os
 
 
 def main():
-    print("\n" + "█"*65)
+    print("\n" + "*"*65)
     print("  EXAMPLE 4.2  Sparse tensor systems (SuiteSparse)")
-    print("█"*65)
+    print("*"*65)
 
     from tensor_toolbox.tensorLinalg import (t_product as tp, t_pinv_apply as tpa,
                                               t_frobenius_norm as tfn)

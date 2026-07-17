@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Example 4.1 — Dense overdetermined tensor systems.
 
-A ∈ R^{500×n×10}, n ∈ {20,30,40,50,60,80}, noise=1e-3
+A ∈ R^{500xnx10}, n ∈ {20,30,40,50,60,80}, noise=1e-3
 5 independent trials, max_iter=800, eta=0.6, tau=10
 """
 import numpy as np
@@ -14,11 +14,11 @@ from utils import (device, dtype, SEED, OUTDIR, METHODS, METHOD_STYLE,
 
 
 def main():
-    print("\n" + "█"*65)
+    print("\n" + "*"*65)
     print("  EXAMPLE 4.1  Dense overdetermined tensor systems")
-    print("  A ∈ R^{500×n×10}, n ∈ {20,30,40,50,60,80}, noise=1e-3")
+    print("  A ∈ R^{500xnx10}, n ∈ {20,30,40,50,60,80}, noise=1e-3")
     print("  5 independent trials, max_iter=800, eta=0.6, tau=10")
-    print("█"*65)
+    print("*"*65)
 
     from tensor_toolbox.tensorLinalg import t_product as tp, t_pinv_apply as tpa
 

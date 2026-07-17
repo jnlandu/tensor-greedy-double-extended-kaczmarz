@@ -1,3 +1,9 @@
 torch
 numpy
-tensor_toolbox # usse: pip install -q git+https://github.com/jnlandu/tensor-tensor-toolbox-in-python
+scipy
+matplotlib
+ssgetpy
+imageio
+scikit-image
+tensor_toolbox @ git+https://github.com/jnlandu/tensor-tensor-toolbox-in-python
+trk_algorithms @ git+https://github.com/jnlandu/tensor-randomized-kaczmarz-algorithms
